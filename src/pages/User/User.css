@@ -1,0 +1,38 @@
+.user-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+  }
+  
+  .user-container-div {
+    text-align: center;
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+    
+  .user-container h1 {
+    margin-bottom: 20px;
+  }
+  
+  .user-container-button,
+  .delete-btn {
+    width: 70%;
+    margin-bottom: 10px;
+    padding: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .delete-btn {
+    background-color: #dc3545;
+  }
+  
+  
