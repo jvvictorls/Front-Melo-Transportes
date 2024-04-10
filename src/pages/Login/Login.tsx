@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { requestLogin } from '../../services/request';
 import './Login.css';
+import Header from '../../components/Header';
 
 function Login() {
   const [email, setEmail] = useState('');

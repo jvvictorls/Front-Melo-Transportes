@@ -3,10 +3,10 @@ import Nav from './Nav';
 
 function Header() {
   return (
-    <header className="bg-blue-gray text-white py-4">
+    <header className="bg-white text-white py-4 border shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         <Link
-          to="/"
+          to="/dashboard"
         >
           <img
             src="/src/public/recropped-melo.png"

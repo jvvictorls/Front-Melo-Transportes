@@ -1,7 +1,6 @@
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { deleteUser } from '../../services/request';
-import './User.css';
+import { deleteUser } from '../services/request';
 
 function User() {
   const navigate = useNavigate();
@@ -17,7 +16,7 @@ function User() {
       localStorage.clear();
       setDeleted(true);
     } catch (error) {
-      console.log('Não foi possível deletar o usuário.');
+      setDeleted(false);
     }
   };
 

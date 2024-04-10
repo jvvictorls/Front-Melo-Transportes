@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 function Nav() {
   return (
     <nav>
-      <ul className="flex">
+      <ul className="flex text-black text-lg">
         <li>
           <NavLink to="/" end className="mr-4 hover:text-gray-400">
             Home
