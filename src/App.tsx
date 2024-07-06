@@ -5,6 +5,7 @@ import User from './pages/User/User';
 import EditUser from './pages/EditUser/EditUser';
 import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
+import RequestRoute from './pages/RequestRoutes/RequestRoute';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="dashboard" element={ <Dashboard /> } />
         <Route path="register" element={ <SignUp /> } />
         <Route path="/user/:id" element={ <User /> } />
+        <Route path="/request" element={ <RequestRoute /> } />
         <Route path="/user/:id/edit" element={ <EditUser /> } />
       </Route>
     </Routes>

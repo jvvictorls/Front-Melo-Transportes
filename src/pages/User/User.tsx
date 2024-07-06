@@ -50,10 +50,10 @@ function User() {
           />
         </div>
         <div className="mt-16">
-          <NavUser Icon={ AiOutlineHome } text="Home" />
-          <NavUser Icon={ AiOutlineUser } text="Perfil" />
-          <NavUser Icon={ AiOutlineCar } text="Solicitar Rota" />
-          <NavUser Icon={ BsCurrencyDollar } text="Relatório de Rotas" />
+          <NavUser Icon={ AiOutlineHome } page='' text="Home" />
+          <NavUser Icon={ AiOutlineUser } page='' text="Perfil"/>
+          <NavUser Icon={ AiOutlineCar } page='request' text="Solicitar Rota" />
+          <NavUser Icon={ BsCurrencyDollar } page='' text="Relatório de Rotas" />
         </div>
       </div>
       <div />
