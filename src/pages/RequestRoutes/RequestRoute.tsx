@@ -1,116 +1,222 @@
 import { Navigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 export default function RequestRoute() {
+  const [collaborators, setCollaborators] = useState(['julia', 'maria', 'joão', 'Robert', 'Ned', 'Arya', 'Sansa', 'Bran', 'Jon', 'Daenerys', 'Tyrion', 'Cersei', 'Jaime', 'Brienne', 'Podrick', 'Sam', 'Gilly', 'Davos', 'Melisandre', 'Varys', 'Grey Worm', 'Missandei', 'Jorah', 'Theon', 'Yara', 'Euron', 'The Hound', 'The Mountain', 'Beric', 'Tormund', 'Gendry', 'Bronn', 'Qyburn', 'Lyanna', 'Mormont', 'Beric', 'Edd']);
   const [formData, setFormData] = useState({
     origin: '',
     destination: '',
     costCentre: '',
+    collaborators: [''],
     date: '',
     time: ''
   });
-  const [collaborators, setCollaborators] = useState('');
-
-  const costsCentre = ['Selecione', 'Produção', 'Manutenção', 'Administração', 'Qualidade', 'HSE', 'Indústria', 'Atendimento ao Cliente', 'Logística']
-
+  // const [collaborators, setCollaborators] = useState([]);
+  const [originInput, setOriginInput] = useState(false);
+  const [destinationInput, setDestinationInput] = useState(false);
+  const costsCentre = [ 'Produção', 'Manutenção', 'Administração', 'Qualidade', 'HSE', 'Indústria', 'Atendimento ao Cliente', 'Logística']
+  const [collaborator, setCollaborator] = useState('');
+  const [filteredCollaborators, setFilteredCollaborators] = useState<string[]>([]);
+  
   const handleChange = (e: any) => {
     const {name, value} = e.target
     setFormData({ ...formData, [name]: value });
+    
+  };
+
+  const handleCollaboratorChange = (e: any) => {
+    const { value } = e.target;
+    setCollaborator(value);
+    const filteredCollaborators = collaborators.filter((collaborator) => {
+      return collaborator.toLowerCase().includes(value.toLowerCase());
+    });
+    setFilteredCollaborators(filteredCollaborators);
   }
+  
+  useEffect(() => {
+    if(formData.origin === 'Outro') {
+      setOriginInput(true)
+    }
+    if(formData.origin === 'Fábrica' || formData.origin === 'Residência' ) {
+      setOriginInput(false);
+    }
+    if (formData.destination === "Fábrica" || formData.destination === 'Residência') {
+      setDestinationInput(false);
+    }
+    if(formData.destination === 'Outro') {
+      setDestinationInput(true)
+  }
+}, [formData.origin, formData.destination]);
 
   return (
-    <div className="container flex justify-center items-center h-screen">
+    <div className="flex h-screen mt-4 items-center justify-center bg-gray-100 flex-row">
       <form 
-      className="flex flex-col border border-solid border-slate-500 h-5/6 w-5/6 items-center shadow-lg rounded-lg shadow-blue-500/50 p-4 bg-white justify-evenly"
+        className="w-full h-full bg-white shadow-md rounded-lg p-6 flex flex-col items-center space-y-6"
+        onSubmit={(e)=> e.preventDefault()}
       >
+        <h1 className="text-3xl font-semibold text-gray-800">Solicitar Rota</h1>
 
-        <h1 
-        className="text-center text-2xl font-bold p-2 "
-        >
-          Solicitar Rota 
-        </h1>
-      
+        <div className="w-5/6 flex flex-col space-y-4">
+          <div className="flex space-x-4">
+            <div className="w-1/2">
+              <select
+                value={formData.origin}
+                onChange={(e) => handleChange(e)}
+                name="origin"
+                id="origin"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                hidden={originInput}
+              >
+                <option value="" disabled selected hidden>Origem</option>
+                <option value="Residência">Residência</option>
+                <option value="Fábrica">Fábrica</option>
+                <option value="Outro">Outro...</option>
+              </select>
 
-          <input 
-          placeholder="Origem"
-          value={formData.origin}
-          onChange={(e) => handleChange(e)}
-          type="text"
-          name="origin" 
-          id="origin" 
-          className=" p-2 border w-4/5 border-solid border-gray-500 rounded-lg"
-          />
-          
-          <input
-          placeholder="Destino" 
-          type="text" 
-          name="destination" 
-          id="destination"
-          className=" p-2 border w-4/5 border-solid border-gray-500 rounded-lg"
-          />
+              {(formData.origin !== 'Fábrica' && formData.origin !== 'Residência')  && (
+                <div className="flex justify-evenly">
+                  <input
+                    type="text"
+                    name="origin"
+                    id="origin"
+                    placeholder="Qual?"
+                    value={formData.origin}
+                    onChange={(e) => handleChange(e)}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    hidden={!originInput}
+                    onClick={() => setFormData({...formData, origin: ''})}
+                  />
+                </div>
+              )}
+            </div>
+           
+            <div className="w-1/2">
+              <select
+                name="destination"
+                id="destination"
+                value={formData.destination}
+                onChange={(e) => handleChange(e)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                hidden={destinationInput}
+              >
+                <option disabled selected hidden>Destino</option>
+                <option value="Residência">Residência</option>
+                <option value="Fábrica">Fábrica</option>
+                <option value="Outro">Outro...</option>
+              </select>
+              {
+                formData.destination !== 'Fábrica' && formData.destination != 'Residência' && (
+                  <div className="flex justify-evenly">
+                    <input
+                      type="text"
+                      name="destination"
+                      id="destination"
+                      placeholder="Qual?"
+                      value={formData.destination}
+                      onChange={(e) => handleChange(e)}
+                      onClick={() => setFormData({...formData, destination: ''})}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      hidden={!destinationInput}
+                    />
+                  </div>
+                )
+              }
+            </div>
+          </div>
 
-          <select 
-          name="costCentre"
-          id="costCentre"
-          value={formData.costCentre}
-          onChange={(e) => handleChange(e)}
-          className=" p-2 border w-4/5 border-solid border-gray-500 rounded-lg bg-white"
-          >
-            {costsCentre.map((costCentre) => (
-              <option 
-              key={costCentre} 
-              value={costCentre}>
-                {costCentre}
-              </option>
+          <div className="flex flex-col space-y-4">
+            <select
+              name="costCentre"
+              id="costCentre"
+              value={formData.costCentre}
+              onChange={(e) => handleChange(e)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="" hidden selected>Centro de Custo</option>
+              {costsCentre.map((costCentre) => (
+                <option key={costCentre} value={costCentre}>
+                  {costCentre}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex space-x-4">
+            <div className="w-full">
+              <input
+                type="text"
+                name="collaborators"
+                id="collaborators"
+                placeholder="Buscar um colaborador..."
+                value={collaborator}
+                onChange={(e) => handleCollaboratorChange(e)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {filteredCollaborators.length > 0 && (
+                <ul
+                className="w-full border border-l-0 border-gray-300 rounded-md py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {filteredCollaborators.map((collaborator, index) => (
+                    <li 
+                    className=" w-full p-2 hover:bg-gray-200 cursor-pointer rounded"
+                    key={index}
+                    onClick={() => {
+                      setFormData({...formData, collaborators: [...formData.collaborators, collaborator]});
+                      setCollaborator('');
+                      setFilteredCollaborators([]);}
+                    }
+                    >
+                      {collaborator}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+          <div
+      className="w-1/2 flex w-full space-x-4">
+            {formData.collaborators.map((collaborator, index) => (
+              <span
+              className="rounded bg-red-700" key={index}>{collaborator}</span>
             ))}
-          </select>
-        
-        {formData.costCentre === 'Selecione' ? null :  (
-          <select 
-          name="collaborator" 
-          id="collaborator"
-          className="p-2 border w-4/5 border-solid border-gray-500 rounded-lg"
+        </div>
+
+          <div className="flex space-x-4">
+            <input
+              type="date"
+              name="date"
+              id="date"
+              className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="time"
+              name="time"
+              id="time"
+              className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
+        <div className="w-3/4 flex justify-evenly space-x-8">
+          <button
+            type="button"
+            className="bg-red-500 text-white  rounded-lg w-32 hover:bg-red-700 transition-colors"
+            onClick={() => <Navigate to="/dashboard" />}
           >
-            <option value="">Colaboradores gerado por map</option>
-          </select>)
-        }
-
-          <input 
-          type="date" 
-          name="date" 
-          id="date"
-          className=" p-2 border w-4/5 border-solid border-gray-500 rounded-lg"
-          />
-          
-          <input 
-          type="time" 
-          name="time" 
-          id="time" 
-          className=" p-2 cursor-pointer border w-4/5 border-solid border-gray-500 rounded-lg"
-          />
-
-        <button 
-        type="submit"
-        className="bg-blue-500 text-white p-1 rounded-lg w-4/5 hover:bg-blue-700"
-        >
-          Solicitar Rota
-        </button>
-
-        <button 
-        className="bg-red-500 text-white p-1 rounded-lg w-4/5 hover:bg-red-700"
-        onClick={() => <Navigate to='/dashboard' />}>
-          Cancelar
-        </button>
-
-        <Link 
-        to={'/Dashboard'}
-        className="text-blue-500 hover:text-blue-700 p-1 rounded-lg w-4/5 text-center underline-offset-1 "
-        >
-          Obter relatório de rotas
-        </Link>
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white py-2 rounded-lg w-32 hover:bg-blue-700 transition-colors"
+            onClick={() => console.log(formData, `isso é um teste ${collaborator}` )}
+          >
+            Solicitar Rota
+          </button>
+        </div>
       </form>
-    </div>
+    <div>
+  </div>
+</div>
   );
 }
