@@ -1,59 +1,82 @@
-import { Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { FormData } from '../../types/FormData';
+import { get } from '../../services/request';
 
 export default function RequestRoute() {
-  const [collaborators, setCollaborators] = useState(['julia', 'maria', 'joão', 'Robert', 'Ned', 'Arya', 'Sansa', 'Bran', 'Jon', 'Daenerys', 'Tyrion', 'Cersei', 'Jaime', 'Brienne', 'Podrick', 'Sam', 'Gilly', 'Davos', 'Melisandre', 'Varys', 'Grey Worm', 'Missandei', 'Jorah', 'Theon', 'Yara', 'Euron', 'The Hound', 'The Mountain', 'Beric', 'Tormund', 'Gendry', 'Bronn', 'Qyburn', 'Lyanna', 'Mormont', 'Beric', 'Edd']);
-  const [formData, setFormData] = useState({
+  const RESIDENCIA = 'residência';
+  const navigate = useNavigate();
+  const [apiData, setApiData] = useState([]);
+  const [collaborators, setCollaborators] = useState(['']);
+  const [formData, setFormData] = useState<FormData>({
     origin: '',
     destination: '',
     costCentre: '',
-    collaborators: [''],
-    date: '',
-    time: ''
+    collaborators: [],
+    date: new Date(),
+    time: '',
   });
   // const [collaborators, setCollaborators] = useState([]);
   const [originInput, setOriginInput] = useState(false);
   const [destinationInput, setDestinationInput] = useState(false);
-  const costsCentre = [ 'Produção', 'Manutenção', 'Administração', 'Qualidade', 'HSE', 'Indústria', 'Atendimento ao Cliente', 'Logística']
+  const costsCentre = [
+    'Produção',
+    'Manutenção',
+    'Administração',
+    'Qualidade', 'HSE', 'Indústria', 'Atendimento ao Cliente', 'Logística',
+  ];
   const [collaborator, setCollaborator] = useState('');
   const [filteredCollaborators, setFilteredCollaborators] = useState<string[]>([]);
-  
+
   const handleChange = (e: any) => {
-    const {name, value} = e.target
+    const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
   };
 
   const handleCollaboratorChange = (e: any) => {
     const { value } = e.target;
     setCollaborator(value);
-    const filteredCollaborators = collaborators.filter((collaborator) => {
-      return collaborator.toLowerCase().includes(value.toLowerCase());
+    const filterCollaborators = collaborators.filter((employee) => {
+      return employee.toLowerCase().includes(value.toLowerCase());
     });
-    setFilteredCollaborators(filteredCollaborators);
-  }
-  
+    setFilteredCollaborators(filterCollaborators);
+  };
+
   useEffect(() => {
-    if(formData.origin === 'Outro') {
-      setOriginInput(true)
+    async function fetchData() {
+      const response = await get('/collaborators');
+      setApiData(response);
+      const collaboratorsName = response.map((employee: any) => employee.name);
+      setCollaborators(collaboratorsName);
     }
-    if(formData.origin === 'Fábrica' || formData.origin === 'Residência' ) {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const updatedCollaborators = collaborators
+      .filter((employee) => !formData.collaborators.includes(employee));
+    setCollaborators(updatedCollaborators);
+
+    if (formData.origin === 'Outro') {
+      setOriginInput(true);
+    }
+    if (formData.origin === 'Fábrica' || formData.origin === RESIDENCIA) {
       setOriginInput(false);
     }
-    if (formData.destination === "Fábrica" || formData.destination === 'Residência') {
+    if (formData.destination === 'Fábrica' || formData.destination === RESIDENCIA) {
       setDestinationInput(false);
     }
-    if(formData.destination === 'Outro') {
-      setDestinationInput(true)
-  }
-}, [formData.origin, formData.destination]);
+    if (formData.destination === 'Outro') {
+      setDestinationInput(true);
+    }
+  }, [formData.origin, formData.destination, formData.collaborators]);
 
   return (
     <div className="flex h-screen mt-4 items-center justify-center bg-gray-100 flex-row">
-      <form 
-        className="w-full h-full bg-white shadow-md rounded-lg p-6 flex flex-col items-center space-y-6"
-        onSubmit={(e)=> e.preventDefault()}
+      <form
+        className="w-full h-full bg-white shadow-md
+        rounded-lg p-6 flex flex-col items-center space-y-6"
+        onSubmit={ (e) => e.preventDefault() }
       >
         <h1 className="text-3xl font-semibold text-gray-800">Solicitar Rota</h1>
 
@@ -61,12 +84,12 @@ export default function RequestRoute() {
           <div className="flex space-x-4">
             <div className="w-1/2">
               <select
-                value={formData.origin}
-                onChange={(e) => handleChange(e)}
+                value={ formData.origin }
+                onChange={ (e) => handleChange(e) }
                 name="origin"
                 id="origin"
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                hidden={originInput}
+                hidden={ originInput }
               >
                 <option value="" disabled selected hidden>Origem</option>
                 <option value="Residência">Residência</option>
@@ -74,52 +97,53 @@ export default function RequestRoute() {
                 <option value="Outro">Outro...</option>
               </select>
 
-              {(formData.origin !== 'Fábrica' && formData.origin !== 'Residência')  && (
+              {(formData.origin !== 'Fábrica' && formData.origin !== 'Residência') && (
                 <div className="flex justify-evenly">
                   <input
                     type="text"
                     name="origin"
                     id="origin"
                     placeholder="Qual?"
-                    value={formData.origin}
-                    onChange={(e) => handleChange(e)}
+                    value={ formData.origin }
+                    onChange={ (e) => handleChange(e) }
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    hidden={!originInput}
-                    onClick={() => setFormData({...formData, origin: ''})}
+                    hidden={ !originInput }
+                    onClick={ () => setFormData({ ...formData, origin: '' }) }
                   />
                 </div>
               )}
             </div>
-           
+
             <div className="w-1/2">
               <select
                 name="destination"
                 id="destination"
-                value={formData.destination}
-                onChange={(e) => handleChange(e)}
+                value={ formData.destination }
+                onChange={ (e) => handleChange(e) }
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                hidden={destinationInput}
+                hidden={ destinationInput }
               >
-                <option disabled selected hidden>Destino</option>
+                <option value="" disabled selected hidden>Destino</option>
                 <option value="Residência">Residência</option>
                 <option value="Fábrica">Fábrica</option>
                 <option value="Outro">Outro...</option>
               </select>
               {
-                formData.destination !== 'Fábrica' && formData.destination != 'Residência' && (
-                  <div className="flex justify-evenly">
-                    <input
-                      type="text"
-                      name="destination"
-                      id="destination"
-                      placeholder="Qual?"
-                      value={formData.destination}
-                      onChange={(e) => handleChange(e)}
-                      onClick={() => setFormData({...formData, destination: ''})}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      hidden={!destinationInput}
-                    />
-                  </div>
+                formData.destination !== 'Fábrica'
+                 && formData.destination !== 'Residência' && (
+                   <div className="flex justify-evenly">
+                     <input
+                       type="text"
+                       name="destination"
+                       id="destination"
+                       placeholder="Qual?"
+                       value={ formData.destination }
+                       onChange={ (e) => handleChange(e) }
+                       onClick={ () => setFormData({ ...formData, destination: '' }) }
+                       className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       hidden={ !destinationInput }
+                     />
+                   </div>
                 )
               }
             </div>
@@ -129,13 +153,13 @@ export default function RequestRoute() {
             <select
               name="costCentre"
               id="costCentre"
-              value={formData.costCentre}
-              onChange={(e) => handleChange(e)}
+              value={ formData.costCentre }
+              onChange={ (e) => handleChange(e) }
               className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="" hidden selected>Centro de Custo</option>
               {costsCentre.map((costCentre) => (
-                <option key={costCentre} value={costCentre}>
+                <option key={ costCentre } value={ costCentre }>
                   {costCentre}
                 </option>
               ))}
@@ -149,42 +173,68 @@ export default function RequestRoute() {
                 name="collaborators"
                 id="collaborators"
                 placeholder="Buscar um colaborador..."
-                value={collaborator}
-                onChange={(e) => handleCollaboratorChange(e)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={ collaborator }
+                onChange={ (e) => handleCollaboratorChange(e) }
+                className="w-full border border-gray-300 rounded-lg px-4 py-2
+                text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               {filteredCollaborators.length > 0 && (
-                <ul
-                className="w-full border border-l-0 border-gray-300 rounded-md py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                <div
+                  className="w-full max-h-40 overflow-y-scroll border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  {filteredCollaborators.map((collaborator, index) => (
-                    <li 
-                    className=" w-full p-2 hover:bg-gray-200 cursor-pointer rounded"
-                    key={index}
-                    onClick={() => {
-                      setFormData({...formData, collaborators: [...formData.collaborators, collaborator]});
-                      setCollaborator('');
-                      setFilteredCollaborators([]);}
-                    }
+                  {filteredCollaborators.map((employee, index) => (
+                    <option
+                      className="w-full border-gray-300 p-2 hover:bg-gray-200 cursor-pointer rounded"
+                      key={ index }
+                      onClick={ () => {
+                        setFormData({ ...formData,
+                          collaborators: [...formData.collaborators, employee] });
+                        setCollaborator('');
+                        setFilteredCollaborators([]);
+                      } }
                     >
-                      {collaborator}
-                    </li>
+                      {employee}
+                    </option>
                   ))}
-                </ul>
+                </div>
               )}
             </div>
           </div>
-          <div
-      className="w-1/2 flex w-full space-x-4">
-            {formData.collaborators.map((collaborator, index) => (
-              <span
-              className="rounded bg-red-700" key={index}>{collaborator}</span>
-            ))}
-        </div>
+          {formData.collaborators.length > 0 && (
+            <div
+            // Quando for telas pequenas, colocar flex, flex-col, space-y-4
+              className="grid grid-cols-4 grid-flow-row gap-4"
+            >
+              {formData.collaborators.map((employee, index) => (
+                <span
+                  className="w-full rounded-3xl border border-red-400 text-red-400 px-4 py-2 text-gray-700 flex flex-row justify-between items-center  "
+                  key={ index }
+                >
+                  {employee}
+                  <button
+                    className="rounded-3xl ml-4 text-red-400 text-gray-700"
+                    onClick={
+                    () => {
+                      const updatedCollaborators = formData.collaborators
+                        .filter((item) => item !== collaborator);
+                      setFormData({ ...formData, collaborators: updatedCollaborators });
+                      const returnCollaborator = formData.collaborators[index];
+                      setCollaborators([...collaborators, returnCollaborator]);
+                    }
+                    }
+                  >
+                    x
+                  </button>
+                </span>
+
+              ))}
+            </div>)}
 
           <div className="flex space-x-4">
             <input
               type="date"
+              value={ formData.date.toString() }
+              onChange={ (e) => handleChange(e) }
               name="date"
               id="date"
               className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -192,6 +242,8 @@ export default function RequestRoute() {
             <input
               type="time"
               name="time"
+              value={ formData.time }
+              onChange={ (e) => handleChange(e) }
               id="time"
               className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -201,22 +253,21 @@ export default function RequestRoute() {
         <div className="w-3/4 flex justify-evenly space-x-8">
           <button
             type="button"
-            className="bg-red-500 text-white  rounded-lg w-32 hover:bg-red-700 transition-colors"
-            onClick={() => <Navigate to="/dashboard" />}
+            className="bg-red-400 text-white rounded-lg w-32 hover:bg-red-700 transition-colors"
+            onClick={ () => navigate('/') }
           >
             Cancelar
           </button>
           <button
             type="submit"
             className="bg-blue-500 text-white py-2 rounded-lg w-32 hover:bg-blue-700 transition-colors"
-            onClick={() => console.log(formData, `isso é um teste ${collaborator}` )}
+            onClick={ () => console.log(formData) }
           >
             Solicitar Rota
           </button>
         </div>
       </form>
-    <div>
-  </div>
-</div>
+      <div />
+    </div>
   );
 }

@@ -49,4 +49,9 @@ export const requestLogin = async (
   return data;
 };
 
+export const get = async (endpoint: string) => {
+  const { data } = await api.get(endpoint);
+  return data;
+}
+
 export default api;
