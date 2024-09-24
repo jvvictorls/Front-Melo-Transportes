@@ -49,6 +49,11 @@ export const requestLogin = async (
   return data;
 };
 
+export const post = async (endpoint: string, body: any) => {
+  const { data } = await api.post(endpoint, body);
+  return data;
+}
+
 export const get = async (endpoint: string) => {
   const { data } = await api.get(endpoint);
   return data;

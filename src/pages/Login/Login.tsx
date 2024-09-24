@@ -14,6 +14,7 @@ function Login() {
 
     try {
       const { data } = await requestLogin('/users/login', { email, password });
+      localStorage.setItem('user', JSON.stringify(data));
       setIsLogged(true);
       setLoginError(false);
     } catch (error) {

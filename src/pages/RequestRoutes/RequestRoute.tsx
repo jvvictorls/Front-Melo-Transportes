@@ -1,10 +1,16 @@
+/* eslint-disable max-lines */
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { FormData } from '../../types/FormData';
-import { get } from '../../services/request';
+import { get, post } from '../../services/request';
+import Modal from '../../components/modal';
 
 export default function RequestRoute() {
-  const RESIDENCIA = 'residência';
+  const [user, setUser] = useState({
+    name: '',
+    id: '',
+    role: '',
+  });
   const navigate = useNavigate();
   const [apiData, setApiData] = useState([]);
   const [collaborators, setCollaborators] = useState(['']);
@@ -15,18 +21,22 @@ export default function RequestRoute() {
     collaborators: [],
     date: new Date(),
     time: '',
+    userId: user.id,
   });
   // const [collaborators, setCollaborators] = useState([]);
   const [originInput, setOriginInput] = useState(false);
   const [destinationInput, setDestinationInput] = useState(false);
   const costsCentre = [
-    'Produção',
-    'Manutenção',
+    'Produção', 'Manutenção',
     'Administração',
     'Qualidade', 'HSE', 'Indústria', 'Atendimento ao Cliente', 'Logística',
   ];
   const [collaborator, setCollaborator] = useState('');
   const [filteredCollaborators, setFilteredCollaborators] = useState<string[]>([]);
+  const [errorOriginDestionation, setErrorOriginDestination] = useState(false);
+  const [invalidInput, setInvalidInput] = useState(false);
+  const [erroFields, setErroFields] = useState<string[] >([]);
+  const RESIDENCIA = 'residência';
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -42,7 +52,38 @@ export default function RequestRoute() {
     setFilteredCollaborators(filterCollaborators);
   };
 
+  const handleRouteRequest = async (formDatatoDb: FormData) => {
+    if (formData.origin === formData.destination) {
+      setErrorOriginDestination(true);
+      setTimeout(() => {
+        setErrorOriginDestination(false);
+      }, 3000);
+    }
+    if (formDatatoDb.origin === ''
+    || formDatatoDb.destination === ''
+    || formDatatoDb.costCentre === ''
+    || !formDatatoDb.date
+    || formDatatoDb.time === '' || formDatatoDb.collaborators.length === 0) {
+      setErroFields([
+        formDatatoDb.origin === '' ? 'Origem' : '',
+        formDatatoDb.destination === '' ? 'Destino' : '',
+        formDatatoDb.costCentre === '' ? 'Centro de Custo' : '',
+        !formDatatoDb.date ? 'Data' : '',
+        formDatatoDb.time === '' ? 'Hora' : '',
+        formDatatoDb.collaborators.length === 0 ? 'Colaboradores' : '',
+      ]);
+      setInvalidInput(true);
+    }
+
+    /* const response = await post('/routes', formData);
+    if (response) {
+      navigate('/');
+    } */
+  };
+
   useEffect(() => {
+    const retieveUser = localStorage.getItem('user');
+    setUser(JSON.parse(retieveUser || '{}'));
     async function fetchData() {
       const response = await get('/collaborators');
       setApiData(response);
@@ -72,15 +113,15 @@ export default function RequestRoute() {
   }, [formData.origin, formData.destination, formData.collaborators]);
 
   return (
-    <div className="flex h-screen mt-4 items-center justify-center bg-gray-100 flex-row">
+    <div className="flex h-screen items-center justify-center bg-gray-100 flex-row">
       <form
-        className="w-full h-full bg-white shadow-md
-        rounded-lg p-6 flex flex-col items-center space-y-6"
+        className="w-full h-full shadow-md
+        rounded-lg flex flex-col items-center space-y-12 justify-center bg-gray-200"
         onSubmit={ (e) => e.preventDefault() }
       >
         <h1 className="text-3xl font-semibold text-gray-800">Solicitar Rota</h1>
 
-        <div className="w-5/6 flex flex-col space-y-4">
+        <div className="w-5/6 flex flex-col space-y-12">
           <div className="flex space-x-4">
             <div className="w-1/2">
               <select
@@ -149,6 +190,14 @@ export default function RequestRoute() {
             </div>
           </div>
 
+          {errorOriginDestionation && (
+            <span
+              className=" rounded-3xl border border-red-400 text-red-400 px-4 py-2 text-gray-700 flex flex-row justify-between items-center "
+            >
+              Origem e destino não podem ser iguais
+            </span>
+          )}
+
           <div className="flex flex-col space-y-4">
             <select
               name="costCentre"
@@ -216,7 +265,7 @@ export default function RequestRoute() {
                     onClick={
                     () => {
                       const updatedCollaborators = formData.collaborators
-                        .filter((item) => item !== collaborator);
+                        .filter((item) => item !== employee);
                       setFormData({ ...formData, collaborators: updatedCollaborators });
                       const returnCollaborator = formData.collaborators[index];
                       setCollaborators([...collaborators, returnCollaborator]);
@@ -261,13 +310,18 @@ export default function RequestRoute() {
           <button
             type="submit"
             className="bg-blue-500 text-white py-2 rounded-lg w-32 hover:bg-blue-700 transition-colors"
-            onClick={ () => console.log(formData) }
+            onClick={ () => handleRouteRequest(formData) }
           >
             Solicitar Rota
           </button>
         </div>
       </form>
       <div />
+      <Modal
+        isVisible={ invalidInput }
+        onClose={ () => setInvalidInput(false) }
+        notFilledFields={ erroFields }
+      />
     </div>
   );
 }
