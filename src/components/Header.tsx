@@ -1,6 +1,7 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 function Header() {
+  const navigate = useNavigate();
   return (
     <header className="w-full flex items-center justify-center shadow-md">
       <div className="w-3/4 flex  justify-evenly items-center">
@@ -17,7 +18,7 @@ function Header() {
           </Link>
         </div>
 
-        <nav className="flex-1 flex items-center justify-center  justify-evenly items-center ">
+        <nav className="flex-1 flex items-center justify-center justify-evenly items-center ">
           <NavLink
             to="/"
             className="mb-2"
@@ -43,6 +44,7 @@ function Header() {
         >
           <button
             className=""
+            onClick={ () => navigate('/login') }
           >
             Entrar
           </button>

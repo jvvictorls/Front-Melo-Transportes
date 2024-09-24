@@ -38,6 +38,10 @@ export default function RequestRoute() {
   const [erroFields, setErroFields] = useState<string[] >([]);
   const RESIDENCIA = 'residência';
 
+  if (!user.id) {
+    navigate('/login');
+  }
+  console.log(user);
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });

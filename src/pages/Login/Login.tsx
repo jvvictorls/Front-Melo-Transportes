@@ -22,56 +22,48 @@ function Login() {
       setLoginError(true);
     }
   };
-  const id = localStorage.getItem('id');
 
-  if (isLogged) return <Navigate to={ `/user/${id}` } />;
+  if (isLogged) return <Navigate to="/dashboard" />;
 
   return (
-    <section className="login-container">
-      <form className="login-form" onSubmit={ (e) => e.preventDefault() }>
-        <h1 className="login-title">Área do usuário</h1>
-        <label htmlFor="email-input">
-          Email:
+    <div className="">
+      <div
+        className="flex bg-gray-200 flex-col items-center justify-center h-screen"
+        onSubmit={ (e) => e.preventDefault() }
+      >
+        <form
+          className="bg-gray-white flex flex-col items-center justify-evenly border border-gray-300 p-8 rounded-lg
+          shadow-lg shadow-gray-300 w-2/4 h-3/4"
+        >
+
+          <h1 className="text-3xl">Área do usuário</h1>
           <input
-            className="login-input"
+            className="border border-gray-300 p-2 rounded-lg"
             type="text"
             value={ email }
             onChange={ ({ target: { value } }) => setEmail(value) }
             data-testid="login__login_input"
             placeholder="Login"
           />
-        </label>
-        <label htmlFor="password-input">
-          Password:
           <input
-            className="login-input"
+            className="border border-gray-300 p-2 rounded-lg"
             type={ seePassword ? 'text' : 'password' }
             value={ password }
             onChange={ ({ target: { value } }) => setPassword(value) }
             data-testid="login__password_input"
             placeholder="Senha"
           />
-          <button
-            className="show-password-btn"
-            onClick={ () => setSeePassword(!seePassword) }
-          >
-            <span>
-              Mostar senha
-            </span>
-          </button>
           { loginError && <p className="login-error">Email ou senha inválidos.</p>}
-        </label>
-        <button
-          className="login-btn"
-          data-testid="login__login_btn"
-          type="submit"
-          onClick={ (event) => login(event) }
-        >
-          Entrar
-        </button>
-        <Link to="/register">Ainda não tenho conta</Link>
-      </form>
-    </section>
+          <button
+            className=""
+            onClick={ (event) => login(event) }
+          >
+            Entrar
+          </button>
+          <Link to="/register">Ainda não tenho conta</Link>
+        </form>
+      </div>
+    </div>
   );
 }
 
