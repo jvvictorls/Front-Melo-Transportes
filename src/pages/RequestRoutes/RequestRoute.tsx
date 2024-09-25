@@ -17,10 +17,10 @@ export default function RequestRoute() {
   const [formData, setFormData] = useState<FormData>({
     origin: '',
     destination: '',
-    costCentre: '',
+    costCenter: '',
     collaborators: [],
     date: new Date(),
-    time: '',
+    time: new Date().toLocaleTimeString().slice(0, 5),
     userId: user.id,
   });
   // const [collaborators, setCollaborators] = useState([]);
@@ -38,10 +38,6 @@ export default function RequestRoute() {
   const [erroFields, setErroFields] = useState<string[] >([]);
   const RESIDENCIA = 'residência';
 
-  if (!user.id) {
-    navigate('/login');
-  }
-  console.log(user);
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -56,8 +52,8 @@ export default function RequestRoute() {
     setFilteredCollaborators(filterCollaborators);
   };
 
-  const handleRouteRequest = async (formDatatoDb: FormData) => {
-    if (formData.origin === formData.destination) {
+  function validateFields(formDatatoDb: FormData) {
+    if (formDatatoDb.origin === formDatatoDb.destination) {
       setErrorOriginDestination(true);
       setTimeout(() => {
         setErrorOriginDestination(false);
@@ -65,29 +61,56 @@ export default function RequestRoute() {
     }
     if (formDatatoDb.origin === ''
     || formDatatoDb.destination === ''
-    || formDatatoDb.costCentre === ''
+    || formDatatoDb.costCenter === ''
     || !formDatatoDb.date
     || formDatatoDb.time === '' || formDatatoDb.collaborators.length === 0) {
       setErroFields([
         formDatatoDb.origin === '' ? 'Origem' : '',
         formDatatoDb.destination === '' ? 'Destino' : '',
-        formDatatoDb.costCentre === '' ? 'Centro de Custo' : '',
+        formDatatoDb.costCenter === '' ? 'Centro de Custo' : '',
         !formDatatoDb.date ? 'Data' : '',
         formDatatoDb.time === '' ? 'Hora' : '',
         formDatatoDb.collaborators.length === 0 ? 'Colaboradores' : '',
       ]);
       setInvalidInput(true);
+      return true;
     }
+    setInvalidInput(false);
+    return false;
+  }
 
-    /* const response = await post('/routes', formData);
-    if (response) {
-      navigate('/');
-    } */
+  function formatData(formDatatoDb: FormData) {
+    const collaboratorsIds = apiData.filter((employee: any) => formDatatoDb
+      .collaborators.includes(employee.name)).map((employee: any) => employee.id);
+    const onFormat = collaboratorsIds.map((id: string) => {
+      const data = {
+        origin: formDatatoDb.origin,
+        destination: formDatatoDb.destination,
+        costCenter: formDatatoDb.costCenter,
+        collaborators: [{
+          id,
+        }],
+        date: formDatatoDb.date,
+        time: formDatatoDb.time,
+        userId: formDatatoDb.userId,
+      };
+      return data;
+    });
+    return onFormat[0];
+  }
+
+  const handleRouteRequest = async (formDatatoDb: FormData) => {
+    const hasErrors = validateFields(formDatatoDb);
+    if (hasErrors) return;
+    const formattedData = formatData(formDatatoDb);
+    const { status } = await post('/extra-routes', formattedData);
+    if (status === 201) navigate('/dashboard');
   };
 
   useEffect(() => {
-    const retieveUser = localStorage.getItem('user');
-    setUser(JSON.parse(retieveUser || '{}'));
+    const userId = localStorage.getItem('id');
+    if (!userId) navigate('/login');
+    handleChange({ target: { name: 'userId', value: userId } });
     async function fetchData() {
       const response = await get('/collaborators');
       setApiData(response);
@@ -120,7 +143,7 @@ export default function RequestRoute() {
     <div className="flex h-screen items-center justify-center bg-gray-100 flex-row">
       <form
         className="w-full h-full shadow-md
-        rounded-lg flex flex-col items-center space-y-12 justify-center bg-gray-200"
+        rounded-lg flex flex-col items-center space-y-6 justify-center bg-gray-200"
         onSubmit={ (e) => e.preventDefault() }
       >
         <h1 className="text-3xl font-semibold text-gray-800">Solicitar Rota</h1>
@@ -133,7 +156,7 @@ export default function RequestRoute() {
                 onChange={ (e) => handleChange(e) }
                 name="origin"
                 id="origin"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 hidden={ originInput }
               >
                 <option value="" disabled selected hidden>Origem</option>
@@ -151,7 +174,7 @@ export default function RequestRoute() {
                     placeholder="Qual?"
                     value={ formData.origin }
                     onChange={ (e) => handleChange(e) }
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     hidden={ !originInput }
                     onClick={ () => setFormData({ ...formData, origin: '' }) }
                   />
@@ -165,7 +188,7 @@ export default function RequestRoute() {
                 id="destination"
                 value={ formData.destination }
                 onChange={ (e) => handleChange(e) }
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 hidden={ destinationInput }
               >
                 <option value="" disabled selected hidden>Destino</option>
@@ -185,7 +208,7 @@ export default function RequestRoute() {
                        value={ formData.destination }
                        onChange={ (e) => handleChange(e) }
                        onClick={ () => setFormData({ ...formData, destination: '' }) }
-                       className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                        hidden={ !destinationInput }
                      />
                    </div>
@@ -204,16 +227,16 @@ export default function RequestRoute() {
 
           <div className="flex flex-col space-y-4">
             <select
-              name="costCentre"
-              id="costCentre"
-              value={ formData.costCentre }
+              name="costCenter"
+              id="costCenter"
+              value={ formData.costCenter }
               onChange={ (e) => handleChange(e) }
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="" hidden selected>Centro de Custo</option>
-              {costsCentre.map((costCentre) => (
-                <option key={ costCentre } value={ costCentre }>
-                  {costCentre}
+              {costsCentre.map((costCenter) => (
+                <option key={ costCenter } value={ costCenter }>
+                  {costCenter}
                 </option>
               ))}
             </select>
@@ -286,7 +309,7 @@ export default function RequestRoute() {
           <div className="flex space-x-4">
             <input
               type="date"
-              value={ formData.date.toString() }
+              value={ formData.date.toString().slice(0, 10) }
               onChange={ (e) => handleChange(e) }
               name="date"
               id="date"

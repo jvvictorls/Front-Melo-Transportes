@@ -1,7 +1,7 @@
 export type FormData = {
   origin: string;
   destination: string;
-  costCentre: string;
+  costCenter: string;
   collaborators: string[];
   date: Date;
   time: string;

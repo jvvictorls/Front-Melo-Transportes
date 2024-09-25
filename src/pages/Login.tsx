@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
-import { requestLogin } from '../../services/request';
+import { requestLogin } from '../services/request';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -13,8 +13,7 @@ function Login() {
     event.preventDefault();
 
     try {
-      const { data } = await requestLogin('/users/login', { email, password });
-      localStorage.setItem('user', JSON.stringify(data));
+      await requestLogin('/users/login', { email, password });
       setIsLogged(true);
       setLoginError(false);
     } catch (error) {
@@ -28,12 +27,12 @@ function Login() {
   return (
     <div className="">
       <div
-        className="flex bg-gray-200 flex-col items-center justify-center h-screen"
+        className="flex bg-gray-200 flex-col items-center h-screen justify-center"
         onSubmit={ (e) => e.preventDefault() }
       >
         <form
-          className="bg-gray-white flex flex-col items-center justify-evenly border border-gray-300 p-8 rounded-lg
-          shadow-lg shadow-gray-300 w-2/4 h-3/4"
+          className="bg-white flex flex-col  items-center justify-evenly border border-gray-300 p-8 rounded-lg
+          shadow-md w-2/8 h-3/4"
         >
 
           <h1 className="text-3xl">Área do usuário</h1>
@@ -55,12 +54,17 @@ function Login() {
           />
           { loginError && <p className="login-error">Email ou senha inválidos.</p>}
           <button
-            className=""
+            className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
             onClick={ (event) => login(event) }
           >
             Entrar
           </button>
-          <Link to="/register">Ainda não tenho conta</Link>
+          <Link
+            className="text-blue-500 hover:text-blue-700 underline"
+            to="/register"
+          >
+            Ainda não tenho conta
+          </Link>
         </form>
       </div>
     </div>
