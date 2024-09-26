@@ -25,9 +25,9 @@ function Login() {
   if (isLogged) return <Navigate to="/dashboard" />;
 
   return (
-    <div className="">
+    <div className="w-full">
       <div
-        className="flex bg-gray-200 flex-col items-center h-screen justify-center"
+        className="flex xs:bg-red-700 h-screen bg-gray-200 flex-col items-center justify-center"
         onSubmit={ (e) => e.preventDefault() }
       >
         <form
