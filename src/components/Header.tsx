@@ -8,7 +8,7 @@ function Header() {
         <div className="ml-4">
           <Link
             to="/dashboard"
-            className="flex justify-center items-center"
+            className="flex justify-center items-cente"
           >
             <img
               src="/src/public/recropped-melo.png"
@@ -20,12 +20,6 @@ function Header() {
 
         <nav className="flex-1 flex items-center justify-center justify-evenly items-center ">
           <NavLink
-            to="/"
-            className="mb-2"
-          >
-            Home
-          </NavLink>
-          <NavLink
             to="/request"
             className="mb-2"
           >
@@ -36,6 +30,19 @@ function Header() {
             className="mb-2"
           >
             Rotas
+          </NavLink>
+          <NavLink
+            to="registerCollaborator"
+            className="mb-2"
+          >
+            Cadastro de Colaborador
+          </NavLink>
+
+          <NavLink
+            to="contact"
+            className="mb-2"
+          >
+            Contate-nos
           </NavLink>
         </nav>
 

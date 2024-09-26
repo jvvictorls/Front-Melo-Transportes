@@ -1,9 +1,9 @@
 /* eslint-disable max-lines */
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { FormData } from '../../types/FormData';
-import { get, post } from '../../services/request';
-import Modal from '../../components/modal';
+import { FormData } from '../types/FormData';
+import { get, post } from '../services/request';
+import Modal from '../components/modal';
 
 export default function RequestRoute() {
   const [user, setUser] = useState({
@@ -36,7 +36,7 @@ export default function RequestRoute() {
   const [errorOriginDestionation, setErrorOriginDestination] = useState(false);
   const [invalidInput, setInvalidInput] = useState(false);
   const [erroFields, setErroFields] = useState<string[] >([]);
-  const RESIDENCIA = 'residência';
+  const RESIDENCIA = 'Residência';
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -140,10 +140,9 @@ export default function RequestRoute() {
   }, [formData.origin, formData.destination, formData.collaborators]);
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100 flex-row">
+    <div className="flex w-full items-center justify-center flex-row">
       <form
-        className="w-full h-full shadow-md
-        rounded-lg flex flex-col items-center space-y-6 justify-center bg-gray-200"
+        className="w-full h-full shadow-md rounded-lg flex flex-col items-center space-y-6 justify-center py-8"
         onSubmit={ (e) => e.preventDefault() }
       >
         <h1 className="text-3xl font-semibold text-gray-800">Solicitar Rota</h1>
@@ -165,7 +164,7 @@ export default function RequestRoute() {
                 <option value="Outro">Outro...</option>
               </select>
 
-              {(formData.origin !== 'Fábrica' && formData.origin !== 'Residência') && (
+              {(formData.origin !== 'Fábrica' && formData.origin !== RESIDENCIA) && (
                 <div className="flex justify-evenly">
                   <input
                     type="text"

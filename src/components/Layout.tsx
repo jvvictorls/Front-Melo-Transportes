@@ -6,7 +6,7 @@ function Layout() {
   return (
     <div className="flex flex-col h-screen">
       <Header />
-      <div className="flex-grow">
+      <div className="flex w-full flex-grow">
         <Outlet />
       </div>
       <Footer />
