@@ -4,7 +4,7 @@ import SignUp from './pages/SignUp/SignUp';
 import User from './pages/User/User';
 import EditUser from './pages/EditUser/EditUser';
 import Layout from './components/Layout';
-import Dashboard from './components/Dashboard';
+import Dashboard from './pages/Dashboard';
 import RequestRoute from './pages/RequestRoute';
 
 function App() {
