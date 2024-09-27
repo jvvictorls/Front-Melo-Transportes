@@ -63,7 +63,8 @@ export default function RequestRoute() {
     || formDatatoDb.destination === ''
     || formDatatoDb.costCenter === ''
     || !formDatatoDb.date
-    || formDatatoDb.time === '' || formDatatoDb.collaborators.length === 0) {
+    || formDatatoDb.time === ''
+    || formDatatoDb.collaborators.length === 0) {
       setErroFields([
         formDatatoDb.origin === '' ? 'Origem' : '',
         formDatatoDb.destination === '' ? 'Destino' : '',
@@ -102,6 +103,7 @@ export default function RequestRoute() {
   const handleRouteRequest = async (formDatatoDb: FormData) => {
     const hasErrors = validateFields(formDatatoDb);
     if (hasErrors) return;
+    if (erroFields.length > 0) return;
     const formattedData = formatData(formDatatoDb);
     const { status } = await post('/extra-routes', formattedData);
     if (status === 201) navigate('/dashboard');
