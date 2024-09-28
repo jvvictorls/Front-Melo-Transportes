@@ -1,10 +1,11 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { GrMenu } from 'react-icons/gr';
 import { useState } from 'react';
+import Sidebar from './Sidebar';
 
 function Header() {
   const navigate = useNavigate();
-  const [menu, setMenu] = useState(false);
+  const [sideBar, setSideBar] = useState(false);
   return (
     <header
       className="w-full flex items-center justify-center shadow-md"
@@ -15,7 +16,7 @@ function Header() {
         >
           <GrMenu
             className="lg:hidden xl:hidden"
-            onClick={ () => setMenu(!menu) }
+            onClick={ () => setSideBar(!sideBar) }
           />
           <Link
             to="/dashboard"
