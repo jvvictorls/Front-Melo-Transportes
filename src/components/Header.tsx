@@ -5,7 +5,7 @@ import Sidebar from './Sidebar';
 
 function Header() {
   const navigate = useNavigate();
-  const [sideBar, setSideBar] = useState(false);
+  const [sideBar, setSideBar] = useState(true);
   return (
     <header
       className="w-full flex items-center justify-center shadow-md"
@@ -74,6 +74,10 @@ function Header() {
           </button>
         </div>
       </div>
+      <Sidebar
+        isSidebarOpen={ sideBar }
+        setSideBar={ setSideBar }
+      />
     </header>
 
   );
