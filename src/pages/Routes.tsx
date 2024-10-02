@@ -15,10 +15,10 @@ export default function Routes() {
   return (
 
     <div
-      className="flex flex-col justify-center items-center h-screen w-full justify- "
+      className="mt-20 flex flex-col justify-center items-center w-full content"
     >
       <h1
-        className="text-3xl"
+        className="text-3xl mb-8"
       >
         Rotas
       </h1>

@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { GrMenu } from 'react-icons/gr';
+import { useEffect } from 'react';
 
 type SidebarProps = {
   isSidebarOpen: boolean;
@@ -26,24 +27,28 @@ export default function Sidebar({ isSidebarOpen, setSideBar }: SidebarProps) {
           <NavLink
             to="/request"
             className="py-4 text-left hover:bg-gray-700"
+            onClick={ () => setSideBar(!isSidebarOpen) }
           >
             Solicitar Rota
           </NavLink>
           <NavLink
             to="routes"
             className="py-4 text-left hover:bg-gray-700"
+            onClick={ () => setSideBar(!isSidebarOpen) }
           >
             Rotas
           </NavLink>
           <NavLink
             to="registerCollaborator"
             className="py-4 text-left hover:bg-gray-700"
+            onClick={ () => setSideBar(!isSidebarOpen) }
           >
             Cadastro de Colaborador
           </NavLink>
           <NavLink
             to="contact"
             className="py-4 text-left hover:bg-gray-700"
+            onClick={ () => setSideBar(!isSidebarOpen) }
           >
             Contate-nos
           </NavLink>

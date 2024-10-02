@@ -3,7 +3,7 @@ type RoutesCardsProps = {
 };
 export default function routesCards({ routes }: RoutesCardsProps) {
   return (
-    <div className="flex flex-col h-full space-y-4 justify-center w-full">
+    <div className="flex flex-col space-y-4 items-center justify-center w-full md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-4 2xl:grid 2xl:grid-cols-5">
       {routes.map((route: any) => (
         <div
           key={ route.id }
@@ -32,11 +32,15 @@ export default function routesCards({ routes }: RoutesCardsProps) {
               {' '}
               {route.currentCollaborators}
             </p>
-            <button
-              className="bg-blue-700 w-full text-center text-white hover:bg-blue-500 rounded-lg"
+            <div
+              className="w-full flex justify-center"
             >
-              Ver detalhes
-            </button>
+              <button
+                className="bg-blue-500 w-2/3 md:w-2/3 text-center text-white hover:bg-blue-300 rounded-lg p-2 m-2"
+              >
+                Ver detalhes
+              </button>
+            </div>
           </div>
         </div>
       ))}

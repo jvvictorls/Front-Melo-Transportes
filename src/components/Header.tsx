@@ -8,7 +8,7 @@ function Header() {
   const [sideBar, setSideBar] = useState(false);
   return (
     <header
-      className="w-full flex items-center justify-center shadow-md"
+      className="w-full flex items-center justify-center shadow-md z-[1000] fixed top-0 bg-white"
     >
       <div className="w-full flex justify-between ">
         <div
