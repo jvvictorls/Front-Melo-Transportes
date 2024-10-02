@@ -6,11 +6,13 @@ import EditUser from './pages/EditUser/EditUser';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import RequestRoute from './pages/RequestRoute';
+import RoutesPage from './pages/Routes';
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={ <Layout /> }>
+        <Route path="/routes" element={ <RoutesPage /> } />
         <Route path="/login" element={ <Login /> } />
         <Route path="dashboard" element={ <Dashboard /> } />
         <Route path="register" element={ <SignUp /> } />
