@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { GrMenu } from 'react-icons/gr';
 
 type SidebarProps = {
@@ -7,6 +7,7 @@ type SidebarProps = {
 };
 
 export default function Sidebar({ isSidebarOpen, setSideBar }: SidebarProps) {
+  const navigate = useNavigate();
   return (
     <div
       className={ `flex flex-col 
@@ -52,6 +53,10 @@ export default function Sidebar({ isSidebarOpen, setSideBar }: SidebarProps) {
         >
           <button
             className="bg-gray-700 hover:bg-gray-500 p-2"
+            onClick={ () => {
+              setSideBar(!isSidebarOpen);
+              navigate('/login');
+            } }
           >
             Entrar
           </button>

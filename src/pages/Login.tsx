@@ -27,12 +27,11 @@ function Login() {
   return (
     <div className="w-full">
       <div
-        className="flex xs:bg-red-700 h-screen bg-gray-200 flex-col items-center justify-center"
+        className="flex h-screen bg-gray-200 flex-col items-center xs:justify-center sm:justify-center md:justify-center lg:justify-center xl:justify-center 2xl:justify-center"
         onSubmit={ (e) => e.preventDefault() }
       >
         <form
-          className="bg-white flex flex-col  items-center justify-evenly border border-gray-300 p-8 rounded-lg
-          shadow-md w-2/8 h-3/4"
+          className="bg-white flex flex-col items-center justify-evenly border border-gray-300 p-8 rounded-lg shadow-md w-2/8 h-2/4 lg:w-2/6 lg:h-2/4 xl:w-2/6 xl:h-3/4 2xl:w-2/6 2xl:h-3/4"
         >
 
           <h1 className="text-3xl">Área do usuário</h1>

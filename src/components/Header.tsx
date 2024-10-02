@@ -5,7 +5,7 @@ import Sidebar from './Sidebar';
 
 function Header() {
   const navigate = useNavigate();
-  const [sideBar, setSideBar] = useState(true);
+  const [sideBar, setSideBar] = useState(false);
   return (
     <header
       className="w-full flex items-center justify-center shadow-md"
@@ -15,7 +15,7 @@ function Header() {
           className="flex items-center justify-between ml-4 space-x-4"
         >
           <GrMenu
-            className="lg:hidden xl:hidden"
+            className="lg:hidden xl:hidden 2xl:hidden"
             onClick={ () => setSideBar(!sideBar) }
           />
           <Link
