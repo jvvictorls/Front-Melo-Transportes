@@ -142,9 +142,9 @@ export default function RequestRoute() {
   }, [formData.origin, formData.destination, formData.collaborators]);
 
   return (
-    <div className="flex w-full items-center justify-center flex-row">
+    <div className="flex w-full items-center justify-center flex-row lg:mt-10">
       <form
-        className="w-full h-full shadow-md rounded-lg flex flex-col items-center space-y-6 justify-center py-8"
+        className="w-5/6 flex flex-col items-center space-y-6 justify-center py-8"
         onSubmit={ (e) => e.preventDefault() }
       >
         <h1 className="text-3xl font-semibold text-gray-800">Solicitar Rota</h1>
@@ -280,7 +280,7 @@ export default function RequestRoute() {
           {formData.collaborators.length > 0 && (
             <div
             // Quando for telas pequenas, colocar flex, flex-col, space-y-4
-              className="grid grid-cols-4 grid-flow-row gap-4"
+              className="xs:flex xs:flex-col xs:space-y-4 xs:w-full xs:items-center xs:justify-center lg:grid lg:grid-cols-2 lg:gap-4 lg:w-full xl:grid xl:grid-cols-4 xl:gap-4 xl:w-full"
             >
               {formData.collaborators.map((employee, index) => (
                 <span
