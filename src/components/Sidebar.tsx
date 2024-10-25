@@ -39,7 +39,7 @@ export default function Sidebar({ isSidebarOpen, setSideBar }: SidebarProps) {
             Rotas
           </NavLink>
           <NavLink
-            to="registerCollaborator"
+            to="collaborator/register"
             className="py-4 text-left hover:bg-gray-700"
             onClick={ () => setSideBar(!isSidebarOpen) }
           >

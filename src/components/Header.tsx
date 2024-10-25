@@ -44,7 +44,7 @@ function Header() {
             Rotas
           </NavLink>
           <NavLink
-            to="registerCollaborator"
+            to="/collaborator/register"
             className="mb-2"
           >
             Cadastro de Colaborador
