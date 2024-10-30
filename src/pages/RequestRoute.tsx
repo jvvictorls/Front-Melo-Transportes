@@ -142,7 +142,7 @@ export default function RequestRoute() {
   }, [formData.origin, formData.destination, formData.collaborators]);
 
   return (
-    <div className="flex w-full items-center justify-center flex-row lg:mt-10">
+    <div className="flex min-h-screen w-full items-center justify-center flex-row lg:mt-10">
       <form
         className="w-5/6 flex flex-col items-center space-y-6 justify-center py-8"
         onSubmit={ (e) => e.preventDefault() }

@@ -24,16 +24,16 @@ export default function CollaboratorRegister() {
   }
   return (
     <div
-      className="h-screen w-full items-center flex flex-col space-y-4"
+      className="min-h-screen w-full items-center flex flex-col space-y-4 justify-evenly"
     >
-      <form className="w-5/6 mt-24 mb-12">
+      <form className="w-5/6 xl:w-1/2 2xl:w-1/2">
         <h1
           className="bold text-center text-2xl"
         >
           Cadastro
         </h1>
         <div
-          className="xs:grid xs:gap-y-6 md:grid md:gap-y-8 mt-4 h-full"
+          className="grid xs:gap-y-4 sm:gap-y-6 md:gap-y-8 lg:gap-y-8 xl:gap-y-10 2xl:gap-y-10 mt-4 h-full"
         >
           <input
             type="text"
@@ -120,7 +120,7 @@ export default function CollaboratorRegister() {
 
       </form>
       <div
-        className="w-full flex justify-evenly p-4 md:w-5/6 mb-12 bg-red-700"
+        className="w-full flex justify-evenly p-4 md:w-1/2 lg:w-1/2 xl:w-1/2 2xl:w-1/2"
       >
         <button
           className="w-1/3 bg-red-700 p-1 px-4 md:p-4 rounded-xl text-white hover:bg-red-500"
