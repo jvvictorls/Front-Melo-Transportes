@@ -13,18 +13,19 @@ export default function Routes() {
   }, []);
   console.log(apiResponse);
   return (
-
     <div
-      className="mt-20 flex flex-col justify-center items-center w-full content"
+      className="min-h-screen w-full flex flex-col items-center"
     >
-      <h1
-        className="text-3xl mb-8"
-      >
-        Rotas
-      </h1>
-      <RoutesCards
-        routes={ apiResponse }
-      />
+      <div className="flex flex-col 2xl:w-5/6 2xl:mt-32 items-center h-full">
+        <h1
+          className="text-3xl mb-8"
+        >
+          Rotas
+        </h1>
+        <RoutesCards
+          routes={ apiResponse }
+        />
+      </div>
     </div>
   );
 }

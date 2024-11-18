@@ -1,13 +1,13 @@
 type RoutesCardsProps = {
-  routes: []
+  routes: never[]
 };
 export default function routesCards({ routes }: RoutesCardsProps) {
   return (
-    <div className="flex flex-col space-y-4 items-center justify-center w-full md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-4 2xl:grid 2xl:grid-cols-5">
+    <div className="flex flex-col space-y-4 items-center justify-center w-full md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-4 2xl:grid 2xl:grid-cols-3">
       {routes.map((route: any) => (
         <div
           key={ route.id }
-          className="w-full flex justify-center w-full"
+          className="w-full flex justify-center h-full"
         >
           <div
             className="p-4 border border-sm shadow-sm w-3/4 space-y-2"
@@ -17,17 +17,17 @@ export default function routesCards({ routes }: RoutesCardsProps) {
             >
               {route.name}
             </h1>
-            <h2>
+            <h2 className="p-4">
               Motorista:
               {' '}
               {route.driver}
             </h2>
-            <p>
-              Capacideade Máxima:
+            <p className="p-4">
+              Lotação Máxima:
               {' '}
               {route.maxCollaborators}
             </p>
-            <p>
+            <p className="p-4">
               Lotação atual:
               {' '}
               {route.currentCollaborators}

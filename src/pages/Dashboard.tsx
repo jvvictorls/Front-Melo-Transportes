@@ -1,7 +1,7 @@
 function Dashboard() {
   return (
     <main
-      className="w-full"
+      className="w-full min-h-screen"
     >
       <div
         className="h-full flex justify-center items-center"
