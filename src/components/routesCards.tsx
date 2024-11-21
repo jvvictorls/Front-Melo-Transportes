@@ -3,14 +3,14 @@ type RoutesCardsProps = {
 };
 export default function routesCards({ routes }: RoutesCardsProps) {
   return (
-    <div className="flex flex-col space-y-4 items-center justify-center w-full md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-4 2xl:grid 2xl:grid-cols-3">
+    <div className="flex flex-col items-center justify-center w-full gap-4 md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-3 2xl:grid 2xl:grid-cols-3">
       {routes.map((route: any) => (
         <div
           key={ route.id }
           className="w-full flex justify-center h-full"
         >
           <div
-            className="p-4 border border-sm shadow-sm w-3/4 space-y-2"
+            className="p-4 border border-sm shadow-sm xs:w-11/12 md:w-11/12 lg:w-11/12"
           >
             <h1
               className="text-center border-b-2"
