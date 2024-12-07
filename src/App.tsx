@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import RequestRoute from './pages/RequestRoute';
 import RoutesPage from './pages/Routes';
 import CollaboratorRegister from './pages/CollaboratorRegister';
+import RoutesDetails from './pages/RoutesDetails';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/request" element={ <RequestRoute /> } />
         <Route path="/user/:id/edit" element={ <EditUser /> } />
         <Route path="/collaborator/register" element={ <CollaboratorRegister /> } />
+        <Route path="/routes/:id" element={ <RoutesDetails /> } />
       </Route>
     </Routes>
   );
