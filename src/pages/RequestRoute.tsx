@@ -220,7 +220,7 @@ export default function RequestRoute() {
 
           {errorOriginDestionation && (
             <span
-              className=" rounded-3xl border border-red-400 text-red-400 px-4 py-2 text-gray-700 flex flex-row justify-between items-center "
+              className=" rounded-3xl border border-red-400 text-red-400 px-4 py-2 flex flex-row justify-between items-center "
             >
               Origem e destino não podem ser iguais
             </span>
@@ -284,12 +284,12 @@ export default function RequestRoute() {
             >
               {formData.collaborators.map((employee, index) => (
                 <span
-                  className="w-full rounded-3xl border border-red-400 text-red-400 px-4 py-2 text-gray-700 flex flex-row justify-between items-center  "
+                  className="w-full rounded-3xl border border-red-400 text-red-400 px-4 py-2 flex flex-row justify-between items-center  "
                   key={ index }
                 >
                   {employee}
                   <button
-                    className="rounded-3xl ml-4 text-red-400 text-gray-700"
+                    className="rounded-3xl ml-4 text-red-400"
                     onClick={
                     () => {
                       const updatedCollaborators = formData.collaborators

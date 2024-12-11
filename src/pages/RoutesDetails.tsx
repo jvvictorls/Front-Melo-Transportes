@@ -41,51 +41,54 @@ export default function RoutesDetails() {
                     Empresa
                   </th>
                   <th
-                    className="px-4"
+                    className="px-4 border border-black"
                   >
                     Motorista
                   </th>
                   <th
-                    className="px-4"
+                    className="px-4 border border-black"
                   >
                     Máximo de colaboradores
                   </th>
                   <th
-                    className="px-4"
+                    className="px-4 border border-black"
                   >
                     Lotação atual
                   </th>
                 </tr>
-                <tr className="text-center">
-                  <td>{data.name}</td>
-                  <td>{data.client}</td>
-                  <td>{data.driver}</td>
-                  <td>{data.maxCollaborators}</td>
-                  <td>{data.collaborators.length}</td>
+                <tr className="text-center border border-black">
+                  <td className="border border-black">{data.name}</td>
+                  <td className="border border-black">{data.client}</td>
+                  <td className="border border-black">{data.driver}</td>
+                  <td className="border border-black">{data.maxCollaborators}</td>
+                  <td className="border border-black">{data.collaborators.length}</td>
 
                 </tr>
                 <tr
-                  className=""
+                  className="border border-black"
                 >
-                  <th>Bairro</th>
-                  <th>Posição</th>
-                  <th>Colaboradores</th>
-                  <th>Telefone</th>
-                  <th>Departamento</th>
-                  <th>Horário</th>
+                  <th className="border border-black">Bairro</th>
+                  <th className="border border-black">Posição</th>
+                  <th className="border border-black">Colaboradores</th>
+                  <th className="border border-black">Telefone</th>
+                  <th className="border border-black">Departamento</th>
+                  <th className="border border-black">Horário</th>
                 </tr>
               </thead>
               <tbody
                 className="text-center"
               >
                 {data.collaborators.map((collaborator: CollaboratorsType, index) => (
-                  <tr key={ collaborator.id }>
-                    <td>{collaborator.neighborhood}</td>
-                    <td>{index + 1}</td>
-                    <td>{collaborator.name}</td>
-                    <td>{collaborator.phone}</td>
-                    <td>{collaborator.department}</td>
-                    <td>{(collaborator.createdAt).toString()}</td>
+                  <tr
+                    key={ collaborator.id }
+                    className="border border-black"
+                  >
+                    <td className="border border-black">{collaborator.neighborhood}</td>
+                    <td className="border border-black">{index + 1}</td>
+                    <td className="border border-black">{collaborator.name}</td>
+                    <td className="border border-black">{collaborator.phone}</td>
+                    <td className="border border-black">{collaborator.department}</td>
+                    <td className="border border-black">{collaborator.boardingTime}</td>
                   </tr>
                 ))}
               </tbody>

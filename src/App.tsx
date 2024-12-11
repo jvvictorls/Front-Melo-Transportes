@@ -16,8 +16,8 @@ function App() {
       <Route path="/" element={ <Layout /> }>
         <Route path="/routes" element={ <RoutesPage /> } />
         <Route path="/login" element={ <Login /> } />
-        <Route path="dashboard" element={ <Dashboard /> } />
-        <Route path="register" element={ <SignUp /> } />
+        <Route path="/dashboard" index element={ <Dashboard /> } />
+        <Route path="/register" element={ <SignUp /> } />
         <Route path="/user/:id" element={ <User /> } />
         <Route path="/request" element={ <RequestRoute /> } />
         <Route path="/user/:id/edit" element={ <EditUser /> } />

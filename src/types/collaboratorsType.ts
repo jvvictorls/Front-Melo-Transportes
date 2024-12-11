@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 
 export type CollaboratorsType = {
-  length: ReactNode;
   id: number;
   name: string;
   neighborhood: string;
@@ -9,11 +8,11 @@ export type CollaboratorsType = {
   street: string;
   number: string;
   phone: string;
-  arrivalRouteId: number;
-  outboundRouteId: number;
+  boardingTime: string;
   company: string;
   department: string;
   position: string;
   createdAt: string;
   updatedAt: string;
+  length: ReactNode;
 };
