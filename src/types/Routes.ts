@@ -9,5 +9,5 @@ export type RouteType = {
   maxCollaborators: number;
   currentCollaborators: number;
   createdAt: string;
-  updatedAt: string;
+  updatedAt: Date;
 };

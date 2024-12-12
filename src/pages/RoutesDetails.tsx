@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { BsFillTrash3Fill } from 'react-icons/bs';
+import moment from 'moment';
 import { get } from '../services/request';
 import { RouteType } from '../types/Routes';
 import { CollaboratorsType } from '../types/collaboratorsType';
 
 export default function RoutesDetails() {
   const [data, setData] = useState<RouteType>();
+  const [isEditing, setIsEditing] = useState(false);
   const params = useParams();
-  console.log(data);
   useEffect(() => {
     async function fetchData() {
       const response = await get(`/routes/${params.id}`);
@@ -15,11 +17,24 @@ export default function RoutesDetails() {
     }
     fetchData();
   }, [params.id]);
+  const convertedDate = data?.updatedAt ? moment(data.updatedAt).format('DD/MM/YYYY HH:mm') : '';
+  if (data) {
+    data.collaborators.sort((a, b) => {
+      if (a.boardingTime > b.boardingTime) {
+        return 1;
+      }
+      if (a.boardingTime < b.boardingTime) {
+        return -1;
+      }
+      return 0;
+    });
+  }
+
   return (
     data
       ? (
         <div
-          className="min-h-screen w-full flex justify-center items-center"
+          className="min-h-screen w-full flex flex-col justify-center items-center"
         >
           <div
             className=" overflow-x-auto flex w-full justify-center h-3/5 xs:justify-normal"
@@ -55,6 +70,9 @@ export default function RoutesDetails() {
                   >
                     Lotação atual
                   </th>
+                  <th>
+                    Última atualização
+                  </th>
                 </tr>
                 <tr className="text-center border border-black">
                   <td className="border border-black">{data.name}</td>
@@ -62,6 +80,7 @@ export default function RoutesDetails() {
                   <td className="border border-black">{data.driver}</td>
                   <td className="border border-black">{data.maxCollaborators}</td>
                   <td className="border border-black">{data.collaborators.length}</td>
+                  <td>{convertedDate }</td>
 
                 </tr>
                 <tr
@@ -78,7 +97,7 @@ export default function RoutesDetails() {
               <tbody
                 className="text-center"
               >
-                {data.collaborators.map((collaborator: CollaboratorsType, index) => (
+                {data.collaborators.map((collaborator: any, index) => (
                   <tr
                     key={ collaborator.id }
                     className="border border-black"
@@ -89,10 +108,31 @@ export default function RoutesDetails() {
                     <td className="border border-black">{collaborator.phone}</td>
                     <td className="border border-black">{collaborator.department}</td>
                     <td className="border border-black">{collaborator.boardingTime}</td>
+                    {isEditing ? (
+                      <span
+                        className="flex w-full"
+                      >
+                        <BsFillTrash3Fill
+                          className="flex-grow cursor-pointer text-red-700 h-full text-center"
+                        />
+                      </span>
+
+                    ) : null}
+
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+          <div
+            className="flex mt-12 gap-x-8"
+          >
+            <button
+              className={ `${isEditing ? 'bg-green-500' : 'bg-blue-500'} text-white px-4 py-2 rounded-md` }
+              onClick={ () => setIsEditing(!isEditing) }
+            >
+              {isEditing ? 'Aplicar' : 'Editar'}
+            </button>
           </div>
         </div>)
       : (
