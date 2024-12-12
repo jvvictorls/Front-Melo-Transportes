@@ -8,9 +8,9 @@ function Header() {
   const [sideBar, setSideBar] = useState(false);
   return (
     <header
-      className="w-full flex items-center justify-center shadow-md z-[1000] fixed top-0 bg-white"
+      className="w-full flex items-center justify-center shadow-md z-[1000] fixed  bg-white"
     >
-      <div className="w-full flex justify-between ">
+      <div className="w-full flex justify-between h-full ">
         <div
           className="flex items-center justify-between ml-4 space-x-4"
         >
@@ -25,34 +25,34 @@ function Header() {
             <img
               src="/src/public/recropped-melo.png"
               alt="melo_transportes"
-              className="h-6 xs:h-5 mb-3"
+              className="h-6 xs:h-5 m-4"
             />
           </Link>
         </div>
 
-        <nav className="flex flex-1 items-center justify-evenly items-center xs:hidden sm:hidden md:hidden">
+        <nav className="flex flex-1 justify-evenly items-center xs:hidden sm:hidden md:hidden">
           <NavLink
             to="/request"
-            className="mb-2"
+            className=""
           >
             Solicitar Rota
           </NavLink>
           <NavLink
             to="routes"
-            className="mb-2"
+            className=""
           >
             Rotas
           </NavLink>
           <NavLink
             to="/collaborator/register"
-            className="mb-2"
+            className=""
           >
             Cadastro de Colaborador
           </NavLink>
 
           <NavLink
             to="contact"
-            className="mb-2"
+            className=""
           >
             Contate-nos
           </NavLink>

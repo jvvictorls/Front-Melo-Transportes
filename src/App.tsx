@@ -1,8 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 import Login from './pages/Login';
-import SignUp from './pages/SignUp/SignUp';
-import User from './pages/User/User';
-import EditUser from './pages/EditUser/EditUser';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import RequestRoute from './pages/RequestRoute';
@@ -17,10 +14,7 @@ function App() {
         <Route path="/routes" element={ <RoutesPage /> } />
         <Route path="/login" element={ <Login /> } />
         <Route path="/dashboard" index element={ <Dashboard /> } />
-        <Route path="/register" element={ <SignUp /> } />
-        <Route path="/user/:id" element={ <User /> } />
         <Route path="/request" element={ <RequestRoute /> } />
-        <Route path="/user/:id/edit" element={ <EditUser /> } />
         <Route path="/collaborator/register" element={ <CollaboratorRegister /> } />
         <Route path="/routes/:id" element={ <RoutesDetails /> } />
       </Route>
