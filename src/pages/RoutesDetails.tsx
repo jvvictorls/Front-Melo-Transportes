@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { BsFillTrash3Fill } from 'react-icons/bs';
+import { BsFillTrash3Fill, BsFillPencilFill } from 'react-icons/bs';
 import moment from 'moment';
 import { get } from '../services/request';
 import { RouteType } from '../types/Routes';
@@ -102,17 +102,6 @@ export default function RoutesDetails() {
                     <td className="border border-black">{collaborator.phone}</td>
                     <td className="border border-black">{collaborator.department}</td>
                     <td className="border border-black">{collaborator.boardingTime}</td>
-                    {isEditing ? (
-                      <span
-                        className="flex w-full"
-                      >
-                        <BsFillTrash3Fill
-                          className="flex-grow cursor-pointer text-red-700 h-full text-center"
-                        />
-                      </span>
-
-                    ) : null}
-
                   </tr>
                 ))}
               </tbody>
