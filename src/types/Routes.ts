@@ -7,7 +7,6 @@ export type RouteType = {
   client: string;
   collaborators: CollaboratorsType[];
   maxCollaborators: number;
-  currentCollaborators: number;
   createdAt: string;
   updatedAt: Date;
 };

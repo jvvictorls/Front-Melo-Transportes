@@ -4,6 +4,7 @@ import { BsFillTrash3Fill } from 'react-icons/bs';
 import moment from 'moment';
 import { get } from '../services/request';
 import { RouteType } from '../types/Routes';
+import sortRouteCollaborators from '../utils/sortRouteCollaborators';
 import { CollaboratorsType } from '../types/collaboratorsType';
 
 export default function RoutesDetails() {
@@ -18,16 +19,9 @@ export default function RoutesDetails() {
     fetchData();
   }, [params.id]);
   const convertedDate = data?.updatedAt ? moment(data.updatedAt).format('DD/MM/YYYY HH:mm') : '';
+
   if (data) {
-    data.collaborators.sort((a, b) => {
-      if (a.boardingTime > b.boardingTime) {
-        return 1;
-      }
-      if (a.boardingTime < b.boardingTime) {
-        return -1;
-      }
-      return 0;
-    });
+    sortRouteCollaborators(data);
   }
 
   return (
@@ -97,7 +91,7 @@ export default function RoutesDetails() {
               <tbody
                 className="text-center"
               >
-                {data.collaborators.map((collaborator: any, index) => (
+                {data.collaborators.map((collaborator: CollaboratorsType, index) => (
                   <tr
                     key={ collaborator.id }
                     className="border border-black"
@@ -123,16 +117,6 @@ export default function RoutesDetails() {
                 ))}
               </tbody>
             </table>
-          </div>
-          <div
-            className="flex mt-12 gap-x-8"
-          >
-            <button
-              className={ `${isEditing ? 'bg-green-500' : 'bg-blue-500'} text-white px-4 py-2 rounded-md` }
-              onClick={ () => setIsEditing(!isEditing) }
-            >
-              {isEditing ? 'Aplicar' : 'Editar'}
-            </button>
           </div>
         </div>)
       : (
