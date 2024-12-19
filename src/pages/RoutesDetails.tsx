@@ -7,12 +7,14 @@ import { RouteType } from '../types/Routes';
 import sortRouteCollaborators from '../utils/sortRouteCollaborators';
 import { CollaboratorsType } from '../types/collaboratorsType';
 import ConditionalRender from '../components/ConditionalRender';
+import AddACollaboratorToRouteModal from '../components/AddACollaboratorToRouteModal';
 
 export default function RoutesDetails() {
   const [data, setData] = useState<RouteType>();
   const params = useParams();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const editCondition = user.type === 'driver' || user.type === 'admin';
+  const [addCollaborator, setAddCollaborator] = useState(false);
   useEffect(() => {
     async function fetchData() {
       const response = await get(`/routes/${params.id}`);
@@ -150,7 +152,7 @@ export default function RoutesDetails() {
                       <td className="" colSpan={ 6 }>
                         <button
                           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                          onClick={ () => console.log('Buscar novo colaborador') }
+                          onClick={ () => setAddCollaborator(true) }
                         >
                           {' '}
                           <BsPlus />
@@ -163,6 +165,10 @@ export default function RoutesDetails() {
               </tbody>
             </table>
           </div>
+          <AddACollaboratorToRouteModal
+            isOpen={ addCollaborator }
+            onClose={ () => setAddCollaborator(false) }
+          />
         </div>)
       : (
         <div
