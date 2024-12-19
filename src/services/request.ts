@@ -43,9 +43,7 @@ export const requestLogin = async (
   body: { email: string, password: string },
 ) => {
   const { data } = await api.post(endpoint, body);
-  localStorage.setItem('id', data.id);
-  localStorage.setItem('name', data.name);
-  localStorage.setItem('email', data.email);
+  localStorage.setItem('user', JSON.stringify(data));
   return data;
 };
 

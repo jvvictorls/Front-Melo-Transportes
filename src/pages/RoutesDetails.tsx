@@ -6,10 +6,13 @@ import { get } from '../services/request';
 import { RouteType } from '../types/Routes';
 import sortRouteCollaborators from '../utils/sortRouteCollaborators';
 import { CollaboratorsType } from '../types/collaboratorsType';
+import ConditionalRender from '../components/ConditionalRender';
 
 export default function RoutesDetails() {
   const [data, setData] = useState<RouteType>();
   const params = useParams();
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const editCondition = user.type === 'driver' || user.type === 'admin';
   useEffect(() => {
     async function fetchData() {
       const response = await get(`/routes/${params.id}`);
@@ -63,7 +66,9 @@ export default function RoutesDetails() {
                   >
                     Lotação atual
                   </th>
-                  <th>
+                  <th
+                    colSpan={ 3 }
+                  >
                     Última atualização
                   </th>
                 </tr>
@@ -73,7 +78,7 @@ export default function RoutesDetails() {
                   <td className="border border-black">{data.driver}</td>
                   <td className="border border-black">{data.maxCollaborators}</td>
                   <td className="border border-black">{data.collaborators.length}</td>
-                  <td>{convertedDate }</td>
+                  <td className="">{convertedDate }</td>
 
                 </tr>
                 <tr
@@ -85,8 +90,16 @@ export default function RoutesDetails() {
                   <th className="border border-black">Telefone</th>
                   <th className="border border-black">Departamento</th>
                   <th className="border border-black">Horário</th>
-                  <th className="border border-black">Remover</th>
-                  <th className="border border-black">Editar</th>
+                  <ConditionalRender
+                    condition={ editCondition }
+                  >
+                    <th className="border border-black">Remover</th>
+                  </ConditionalRender>
+                  <ConditionalRender
+                    condition={ editCondition }
+                  >
+                    <th className="border border-black">Editar</th>
+                  </ConditionalRender>
 
                 </tr>
               </thead>
@@ -104,35 +117,49 @@ export default function RoutesDetails() {
                     <td className="border border-black">{collaborator.phone}</td>
                     <td className="border border-black">{collaborator.department}</td>
                     <td className="border border-black">{collaborator.boardingTime}</td>
-                    <td className="border border-black place-items-center">
-                      {' '}
-                      <BsTrash
-                        className="text-red-700"
-                      />
-                    </td>
-                    <td
-                      className="border border-black place-items-center"
+                    <ConditionalRender
+                      condition={ editCondition }
                     >
-                      {' '}
-                      <BsPencil
-                        className="text-yellow-700"
-                      />
-                    </td>
-                  </tr>
-                ))}
-                {data.collaborators.length < data.maxCollaborators && (
-                  <tr className="h-20">
-                    <td className="" colSpan={ 6 }>
-                      <button
-                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                        onClick={ () => console.log('Buscar novo colaborador') }
+                      <td className="border border-black place-items-center">
+                        {' '}
+                        <BsTrash
+                          className="text-red-700"
+                        />
+                      </td>
+                    </ConditionalRender>
+                    <ConditionalRender
+                      condition={ editCondition }
+                    >
+                      <td
+                        className="border border-black place-items-center"
                       >
                         {' '}
-                        <BsPlus />
-                      </button>
-                    </td>
+                        <BsPencil
+                          className="text-yellow-700"
+                        />
+                      </td>
+                    </ConditionalRender>
+
                   </tr>
-                )}
+                ))}
+                <ConditionalRender
+                  condition={ editCondition }
+                >
+                  { data.collaborators.length < data.maxCollaborators && (
+                    <tr className="h-20">
+                      <td className="" colSpan={ 6 }>
+                        <button
+                          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                          onClick={ () => console.log('Buscar novo colaborador') }
+                        >
+                          {' '}
+                          <BsPlus />
+                        </button>
+                      </td>
+                    </tr>
+                  )}
+                </ConditionalRender>
+
               </tbody>
             </table>
           </div>
