@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
+import { BsPencil, BsPlus, BsTrash } from 'react-icons/bs';
 import { get } from '../services/request';
 import { RouteType } from '../types/Routes';
 import sortRouteCollaborators from '../utils/sortRouteCollaborators';
@@ -33,7 +34,7 @@ export default function RoutesDetails() {
           >
 
             <table
-              className="table-auto border-collapse border border-black w-5/6"
+              className="table-auto border-collapse w-5/6"
             >
               <thead>
                 <tr className="border border-black">
@@ -84,6 +85,9 @@ export default function RoutesDetails() {
                   <th className="border border-black">Telefone</th>
                   <th className="border border-black">Departamento</th>
                   <th className="border border-black">Horário</th>
+                  <th className="border border-black">Remover</th>
+                  <th className="border border-black">Editar</th>
+
                 </tr>
               </thead>
               <tbody
@@ -92,7 +96,7 @@ export default function RoutesDetails() {
                 {data.collaborators.map((collaborator: CollaboratorsType, index) => (
                   <tr
                     key={ collaborator.id }
-                    className="border border-black"
+                    className=""
                   >
                     <td className="border border-black">{collaborator.neighborhood}</td>
                     <td className="border border-black">{index + 1}</td>
@@ -100,8 +104,35 @@ export default function RoutesDetails() {
                     <td className="border border-black">{collaborator.phone}</td>
                     <td className="border border-black">{collaborator.department}</td>
                     <td className="border border-black">{collaborator.boardingTime}</td>
+                    <td className="border border-black place-items-center">
+                      {' '}
+                      <BsTrash
+                        className="text-red-700"
+                      />
+                    </td>
+                    <td
+                      className="border border-black place-items-center"
+                    >
+                      {' '}
+                      <BsPencil
+                        className="text-yellow-700"
+                      />
+                    </td>
                   </tr>
                 ))}
+                {data.collaborators.length < data.maxCollaborators && (
+                  <tr className="h-20">
+                    <td className="" colSpan={ 6 }>
+                      <button
+                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        onClick={ () => console.log('Buscar novo colaborador') }
+                      >
+                        {' '}
+                        <BsPlus />
+                      </button>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
