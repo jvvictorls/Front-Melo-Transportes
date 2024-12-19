@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { BsFillTrash3Fill, BsFillPencilFill } from 'react-icons/bs';
 import moment from 'moment';
 import { get } from '../services/request';
 import { RouteType } from '../types/Routes';
@@ -9,7 +8,6 @@ import { CollaboratorsType } from '../types/collaboratorsType';
 
 export default function RoutesDetails() {
   const [data, setData] = useState<RouteType>();
-  const [isEditing, setIsEditing] = useState(false);
   const params = useParams();
   useEffect(() => {
     async function fetchData() {
