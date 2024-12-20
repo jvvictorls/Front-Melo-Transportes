@@ -5,10 +5,10 @@ import Footer from './Footer';
 function Layout() {
   return (
     <div
-      className="min-h-screen flex flex-col"
+      className="min-h-screen flex flex-col space-y-4"
     >
       <Header />
-      <div className="flex w-full mb-32">
+      <div className="flex w-full">
         <Outlet />
       </div>
       <Footer />
