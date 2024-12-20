@@ -8,6 +8,7 @@ import sortRouteCollaborators from '../utils/sortRouteCollaborators';
 import { CollaboratorsType } from '../types/collaboratorsType';
 import ConditionalRender from '../components/ConditionalRender';
 import AddACollaboratorToRouteModal from '../components/AddACollaboratorToRouteModal';
+import ModalEditCollaborator from '../components/ModalEditCollaborator';
 
 export default function RoutesDetails() {
   const [data, setData] = useState<RouteType>();
@@ -15,6 +16,10 @@ export default function RoutesDetails() {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const editCondition = user.type === 'driver' || user.type === 'admin';
   const [addCollaborator, setAddCollaborator] = useState(false);
+  const [editCollaborator, setEditCollaborator] = useState(false);
+  const [collaboratorToEdit, setCollaboratorToEdit] = useState<CollaboratorsType>(
+    {} as CollaboratorsType,
+  );
   useEffect(() => {
     async function fetchData() {
       const response = await get(`/routes/${params.id}`);
@@ -28,11 +33,16 @@ export default function RoutesDetails() {
     sortRouteCollaborators(data);
   }
 
+  function handleEditUser(collaborator: CollaboratorsType) {
+    setCollaboratorToEdit(collaborator);
+    setEditCollaborator(true);
+  }
+
   return (
     data
       ? (
         <div
-          className="min-h-screen w-full flex flex-col justify-center items-center"
+          className="min-h-screen w-full flex flex-col justify-center items-center relative mb-4"
         >
           <div
             className=" overflow-x-auto flex w-full justify-center h-3/5 xs:justify-normal"
@@ -122,7 +132,9 @@ export default function RoutesDetails() {
                     <ConditionalRender
                       condition={ editCondition }
                     >
-                      <td className="border border-black place-items-center">
+                      <td
+                        className="border border-black place-items-center"
+                      >
                         {' '}
                         <BsTrash
                           className="text-red-700"
@@ -137,7 +149,8 @@ export default function RoutesDetails() {
                       >
                         {' '}
                         <BsPencil
-                          className="text-yellow-700"
+                          className="text-yellow-700 cursor-pointer"
+                          onClick={ () => handleEditUser(collaborator) }
                         />
                       </td>
                     </ConditionalRender>
@@ -168,6 +181,11 @@ export default function RoutesDetails() {
           <AddACollaboratorToRouteModal
             isOpen={ addCollaborator }
             onClose={ () => setAddCollaborator(false) }
+          />
+          <ModalEditCollaborator
+            open={ editCollaborator }
+            onClose={ () => setEditCollaborator(false) }
+            collaborator={ collaboratorToEdit }
           />
         </div>)
       : (
