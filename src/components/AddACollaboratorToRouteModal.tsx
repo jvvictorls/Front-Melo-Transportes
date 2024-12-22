@@ -18,7 +18,7 @@ function AddACollaboratorToRouteModal({ isOpen, onClose }: AddACollaboratorToRou
       setCollaborators(response);
     }
     fetchData();
-  });
+  }, []);
   if (!isOpen) return null;
 
   function handleAddCollaborator() {
