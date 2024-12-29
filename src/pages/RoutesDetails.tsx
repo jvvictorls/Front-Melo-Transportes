@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import { BsPencil, BsPlus, BsTrash } from 'react-icons/bs';
-import { get } from '../services/request';
+import { get, patch } from '../services/request';
 import { RouteType } from '../types/Routes';
 import sortRouteCollaborators from '../utils/sortRouteCollaborators';
 import { CollaboratorsType } from '../types/collaboratorsType';
@@ -15,6 +15,7 @@ export default function RoutesDetails() {
   const params = useParams();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const editCondition = user.type === 'driver' || user.type === 'admin';
+  const [removeCollaborator, setRemoveCollaborator] = useState(false);
   const [addCollaborator, setAddCollaborator] = useState(false);
   const [editCollaborator, setEditCollaborator] = useState(false);
   const [collaboratorToEdit, setCollaboratorToEdit] = useState<CollaboratorsType>(
@@ -26,7 +27,7 @@ export default function RoutesDetails() {
       setData(response);
     }
     fetchData();
-  }, [params.id]);
+  }, [editCollaborator, removeCollaborator, params.id]);
   const convertedDate = data?.updatedAt ? moment(data.updatedAt).format('DD/MM/YYYY HH:mm') : '';
 
   if (data) {
@@ -37,7 +38,11 @@ export default function RoutesDetails() {
     setCollaboratorToEdit(collaborator);
     setEditCollaborator(true);
   }
-
+  async function handleDelete(collaborator: CollaboratorsType) {
+    setRemoveCollaborator(true);
+    await patch(`/routes/${params.id}/remove/${collaborator.id}`);
+    setRemoveCollaborator(false);
+  }
   return (
     data
       ? (
@@ -137,7 +142,10 @@ export default function RoutesDetails() {
                       >
                         {' '}
                         <BsTrash
-                          className="text-red-700"
+                          className="text-red-700 cursor-pointer"
+                          onClick={
+                            () => handleDelete(collaborator)
+                          }
                         />
                       </td>
                     </ConditionalRender>

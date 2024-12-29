@@ -1,6 +1,7 @@
 import { IoMdClose } from 'react-icons/io';
 import { useEffect, useState } from 'react';
 import { CollaboratorsType } from '../types/collaboratorsType';
+import { put } from '../services/request';
 
 type ModalEditCollaboratorProps = {
   open: boolean;
@@ -20,6 +21,10 @@ function ModalEditCollaborator(props: ModalEditCollaboratorProps) {
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setEditCollaborator({ ...collaborator, [e.target.name]: e.target.value });
+  }
+
+  async function handleSave() {
+    await put(`/collaborators/${collaborator.id}`, editCollaborator);
   }
 
   return (
@@ -114,8 +119,8 @@ function ModalEditCollaborator(props: ModalEditCollaboratorProps) {
               </div>
             </div>
             <button
-              className="text-blue-500"
-              onClick={ onClose }
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+              onClick={ () => handleSave() }
             >
               Salvar
             </button>

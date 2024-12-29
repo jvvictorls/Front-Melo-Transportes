@@ -57,4 +57,14 @@ export const get = async (endpoint: string) => {
   return data;
 };
 
+export const patch = async (endpoint: string, body?: any) => {
+  const response = await api.patch(endpoint, body);
+  return response;
+};
+
+export const put = async (endpoint: string, body?: any) => {
+  const response = await api.put(endpoint, body);
+  return response;
+};
+
 export default api;
