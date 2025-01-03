@@ -6,14 +6,18 @@ import { CollaboratorsType } from '../types/collaboratorsType';
 import { get, patch } from '../services/request';
 
 type AddACollaboratorToRouteModalProps = {
-  isOpen: boolean;
   onClose: () => void;
+  routeCollaborators: CollaboratorsType[];
 };
 
-function AddACollaboratorToRouteModal({ isOpen, onClose }: AddACollaboratorToRouteModalProps) {
+function AddACollaboratorToRouteModal({ onClose, routeCollaborators }
+: AddACollaboratorToRouteModalProps) {
   const [collaborators, setCollaborators] = useState<CollaboratorsType[]>([]);
   const [search, setSearch] = useState('');
   const [collaboratorToAdd, setCollaboratorToAdd] = useState<CollaboratorsType>();
+  const [collaboratorToRemove, setCollaboratorToRemove] = useState<CollaboratorsType[]>(
+    routeCollaborators,
+  );
   const params = useParams();
   useEffect(() => {
     async function fetchData() {
@@ -22,8 +26,7 @@ function AddACollaboratorToRouteModal({ isOpen, onClose }: AddACollaboratorToRou
     }
     fetchData();
   }, []);
-  if (!isOpen) return null;
-
+  console.log(collaboratorToRemove);
   function handleAddCollaborator() {
     if (!collaboratorToAdd) return;
     patch(`/routes/${params.id}/add/${collaboratorToAdd.id}`);

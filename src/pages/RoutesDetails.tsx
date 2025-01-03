@@ -13,6 +13,7 @@ import ModalEditCollaborator from '../components/ModalEditCollaborator';
 export default function RoutesDetails() {
   const [data, setData] = useState<RouteType>();
   const params = useParams();
+  localStorage.setItem('user', JSON.stringify({ type: 'driver' }));
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const editCondition = user.type === 'driver' || user.type === 'admin';
   const [removeCollaborator, setRemoveCollaborator] = useState(false);
@@ -23,8 +24,13 @@ export default function RoutesDetails() {
   );
   useEffect(() => {
     async function fetchData() {
-      const response = await get(`/routes/${params.id}`);
-      setData(response);
+      try {
+        const response = await get(`/routes/${params.id}`);
+        console.log(response);
+        setData(response);
+      } catch (error) {
+        console.log(error);
+      }
     }
     fetchData();
   }, [editCollaborator, removeCollaborator, params.id]);
@@ -186,10 +192,15 @@ export default function RoutesDetails() {
               </tbody>
             </table>
           </div>
-          <AddACollaboratorToRouteModal
-            isOpen={ addCollaborator }
-            onClose={ () => setAddCollaborator(false) }
-          />
+          <ConditionalRender
+            condition={ addCollaborator }
+          >
+
+            <AddACollaboratorToRouteModal
+              onClose={ () => setAddCollaborator(false) }
+              routeCollaborators={ data.collaborators }
+            />
+          </ConditionalRender>
           <ModalEditCollaborator
             open={ editCollaborator }
             onClose={ () => setEditCollaborator(false) }

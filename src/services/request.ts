@@ -43,7 +43,7 @@ export const requestLogin = async (
   body: { email: string, password: string },
 ) => {
   const { data } = await api.post(endpoint, body);
-  localStorage.setItem('user', JSON.stringify(data));
+  localStorage.setItem('token', data);
   return data;
 };
 
@@ -53,7 +53,9 @@ export const post = async (endpoint: string, body: any) => {
 };
 
 export const get = async (endpoint: string) => {
-  const { data } = await api.get(endpoint);
+  const { data } = await api.get(endpoint, {
+    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+  });
   return data;
 };
 
