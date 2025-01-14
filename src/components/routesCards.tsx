@@ -33,7 +33,7 @@ export default function RoutesCards({ routes }: RoutesCardsProps) {
             <p className="p-4">
               Lotação atual:
               {' '}
-              {route.currentCollaborators}
+              {route.collaborators.length}
             </p>
             <div
               className="w-full flex justify-center"
