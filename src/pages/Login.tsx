@@ -1,10 +1,8 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { requestLogin } from '../services/request';
-import AuthContext from '../context/AuthContext';
 
 function Login() {
-  const { auth, setAuth } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLogged, setIsLogged] = useState(false);
@@ -18,11 +16,9 @@ function Login() {
       await requestLogin('/users/login', { email, password });
       setIsLogged(true);
       setLoginError(false);
-      setAuth(true);
     } catch (error) {
       setIsLogged(false);
       setLoginError(true);
-      setAuth(false);
     }
   };
 

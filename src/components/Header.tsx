@@ -1,14 +1,16 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { GrMenu } from 'react-icons/gr';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import Sidebar from './Sidebar';
-import AuthContext from '../context/AuthContext';
 import ConditionalRender from './ConditionalRender';
 
 function Header() {
   const navigate = useNavigate();
   const [sideBar, setSideBar] = useState(false);
-  const { auth } = useContext(AuthContext);
+  const token = localStorage.getItem('token');
+  const isDefined = () => {
+    return !!(token);
+  };
   return (
     <header
       className="w-full flex items-center justify-center shadow-md z-[1000] fixed  bg-white "
@@ -55,8 +57,9 @@ function Header() {
           </nav>
         </div>
         <ConditionalRender
-          condition={ auth === false }
+          condition={ isDefined() }
         >
+
           <div
             className="flex items-center justify-between mr-4 space-x-4"
           >
