@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
-import { requestLogin } from '../services/request';
+import { post, requestLogin } from '../services/request';
+import { UserType } from '../types/UserType';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -9,6 +10,19 @@ function Login() {
   const [loginError, setLoginError] = useState(false);
   const [seePassword, setSeePassword] = useState(false);
 
+  const getUser = async () => {
+    try {
+      const { data } = await post('/users/email', { email }) as { data: UserType };
+      localStorage.setItem('user', JSON.stringify({
+        email: data.email,
+        name: data.name,
+        role: data.type,
+      }));
+    } catch (e: any) {
+      console.log(e.message);
+    }
+  };
+
   const login = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
 
@@ -16,9 +30,15 @@ function Login() {
       await requestLogin('/users/login', { email, password });
       setIsLogged(true);
       setLoginError(false);
+      console.log('Chamando getUser()');
+      await getUser();
+      console.log('getUSer() foi chamado');
     } catch (error) {
       setIsLogged(false);
       setLoginError(true);
+      setTimeout(() => {
+        setLoginError(false);
+      }, 2000);
     }
   };
 
