@@ -56,26 +56,26 @@ function Header() {
             </NavLink>
           </nav>
         </div>
-        <ConditionalRender
+        {/* <ConditionalRender
           condition={ isDefined() }
-        >
+        > */}
 
-          <div
-            className="flex items-center justify-between mr-4 space-x-4"
+        <div
+          className="flex items-center justify-between mr-4 space-x-4"
+        >
+          <button
+            className="xs:hidden sm:hidden"
+            onClick={ () => navigate('/login') }
           >
-            <button
-              className="xs:hidden sm:hidden"
-              onClick={ () => navigate('/login') }
-            >
-              Entrar
-            </button>
-            <button
-              className=""
-            >
-              Registre-se
-            </button>
-          </div>
-        </ConditionalRender>
+            Entrar
+          </button>
+          <button
+            className=""
+          >
+            Registre-se
+          </button>
+        </div>
+        {/* </ConditionalRender> */}
       </div>
 
       <Sidebar
