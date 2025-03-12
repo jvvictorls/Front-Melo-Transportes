@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { requestLogin } from '../services/request';
-import { setAccessToken } from '../services/authService';
+import AuthContext from '../context/AuthContext';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -9,13 +9,14 @@ function Login() {
   const [isLogged, setIsLogged] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [seePassword, setSeePassword] = useState(false);
-
+  const { setAccessToken } = useContext(AuthContext);
   const login = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
 
     try {
       const { accessToken } = await requestLogin('/auth/login', { email, password });
       setAccessToken(accessToken);
+      sessionStorage.setItem('accessToken', accessToken);
       setIsLogged(true);
       setLoginError(false);
     } catch (error) {

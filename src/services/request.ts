@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { setAccessToken, getAccessToken } from './authService';
 
 const api = axios.create({
   baseURL: 'http://localhost:8001',
@@ -11,8 +10,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const accessToken = getAccessToken();
-    console.log('esse é o token', accessToken);
+    const accessToken = sessionStorage.getItem('accessToken');
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -24,18 +22,19 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    console.log(error);
     if (!error.response) {
       return Promise.reject(error);
     }
     if (error.response.status === 401) {
       try {
         const { data } = await api.post('/auth/refresh-token');
-        console.log('esse é o token', data);
         error.config.headers.Authorization = `Bearer ${data}`;
-        setAccessToken(data);
+        sessionStorage.setItem('accessToken', data);
         return await api(error.config);
       } catch (e: any) {
+        if (e.response.data.message === 'missing refresh-token') {
+          window.location.href = '/login';
+        }
         console.log(e.message);
         return Promise.reject(error);
       }
