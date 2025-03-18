@@ -1,16 +1,14 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { GrMenu } from 'react-icons/gr';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Sidebar from './Sidebar';
 import ConditionalRender from './ConditionalRender';
+import AuthContext from '../context/AuthContext';
 
 function Header() {
   const navigate = useNavigate();
   const [sideBar, setSideBar] = useState(false);
-  const token = localStorage.getItem('token');
-  const isDefined = () => {
-    return !!(token);
-  };
+  const { accessToken } = useContext(AuthContext);
   return (
     <header
       className="w-full flex items-center justify-center shadow-md z-[1000] fixed  bg-white "
@@ -56,26 +54,25 @@ function Header() {
             </NavLink>
           </nav>
         </div>
-        {/* <ConditionalRender
-          condition={ isDefined() }
-        > */}
-
-        <div
-          className="flex items-center justify-between mr-4 space-x-4"
+        <ConditionalRender
+          condition={ !accessToken }
         >
-          <button
-            className="xs:hidden sm:hidden"
-            onClick={ () => navigate('/login') }
+          <div
+            className="flex items-center justify-between mr-4 space-x-4"
           >
-            Entrar
-          </button>
-          <button
-            className=""
-          >
-            Registre-se
-          </button>
-        </div>
-        {/* </ConditionalRender> */}
+            <button
+              className="xs:hidden sm:hidden"
+              onClick={ () => navigate('/login') }
+            >
+              Entrar
+            </button>
+            <button
+              className=""
+            >
+              Registre-se
+            </button>
+          </div>
+        </ConditionalRender>
       </div>
 
       <Sidebar

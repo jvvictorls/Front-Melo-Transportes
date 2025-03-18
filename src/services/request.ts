@@ -10,7 +10,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const accessToken = sessionStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -51,6 +51,10 @@ export const requestLogin = async (
   return data;
 };
 
+export const logout = async (endpoint: string) => {
+  await api.delete(endpoint);
+};
+
 export const get = async (endpoint: string) => {
   try {
     const { data } = await api.get(endpoint);
@@ -75,9 +79,10 @@ export const patch = async (endpoint: string, body?: any) => {
   return response;
 };
 
-export const requestDelete = async (endpoint: string) => {
-  await api.delete(endpoint);
+export const requestDelete = async (endpoint: string, data?: any) => {
+  await api.delete(endpoint, data);
   localStorage.clear();
+  sessionStorage.clear();
 };
 
 export default api;

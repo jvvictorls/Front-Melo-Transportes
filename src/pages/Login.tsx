@@ -16,7 +16,7 @@ function Login() {
     try {
       const { accessToken } = await requestLogin('/auth/login', { email, password });
       setAccessToken(accessToken);
-      sessionStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('accessToken', accessToken);
       setIsLogged(true);
       setLoginError(false);
     } catch (error) {

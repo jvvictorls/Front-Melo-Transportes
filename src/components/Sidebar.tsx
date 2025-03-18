@@ -1,14 +1,22 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { GrMenu } from 'react-icons/gr';
-import { useEffect } from 'react';
+import { useContext } from 'react';
+import AuthContext from '../context/AuthContext';
+import ConditionalRender from './ConditionalRender';
+import { logout } from '../services/request';
 
 type SidebarProps = {
   isSidebarOpen: boolean;
   setSideBar: (value: boolean) => void;
 };
 
+const requestLogout = async (endpoint: string) => {
+  await logout(endpoint);
+};
+
 export default function Sidebar({ isSidebarOpen, setSideBar }: SidebarProps) {
   const navigate = useNavigate();
+  const { accessToken, setAccessToken } = useContext(AuthContext);
   return (
     <div
       className={ `flex flex-col 
@@ -57,19 +65,29 @@ export default function Sidebar({ isSidebarOpen, setSideBar }: SidebarProps) {
           className="flex flex-col space-y-4"
         >
           <button
-            className="bg-gray-700 hover:bg-gray-500 p-2"
+            className={ accessToken || accessToken === '' ? 'bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded' : 'bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded' }
             onClick={ () => {
+              if (accessToken) {
+                requestLogout('/auth/logout');
+                setAccessToken('');
+                localStorage.clear();
+                sessionStorage.clear();
+              }
               setSideBar(!isSidebarOpen);
-              navigate('/login');
+              navigate('/login', { replace: true });
             } }
           >
-            Entrar
+            {accessToken || accessToken === '' ? 'Logout' : 'Login'}
           </button>
-          <button
-            className="p-2"
+          <ConditionalRender
+            condition={ !accessToken && accessToken !== '' }
           >
-            Registrar-se
-          </button>
+            <button
+              className="p-2"
+            >
+              Registrar-se
+            </button>
+          </ConditionalRender>
         </div>
       </div>
     </div>

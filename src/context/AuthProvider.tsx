@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react';
 import AuthContext from './AuthContext';
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
-  const storedSessionStorage = sessionStorage.getItem('accessToken');
-  const [accessToken, setAccessToken] = useState(storedSessionStorage);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
 
   useEffect(() => {
-    setAccessToken(accessToken);
+    setAccessToken(localStorage.getItem('accessToken'));
   }, [accessToken]);
 
   return (
