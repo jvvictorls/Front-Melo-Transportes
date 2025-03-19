@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom';
+import { RouteType } from '../types/Routes';
 
 type RoutesCardsProps = {
-  routes: never[]
+  routes: RouteType[]
 };
 export default function RoutesCards({ routes }: RoutesCardsProps) {
   const navigate = useNavigate();
   return (
-    <div className="flex flex-col items-center justify-center w-full gap-4 md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-3 2xl:grid 2xl:grid-cols-3">
+    <div className="flex flex-col items-center justify-center w-full gap-4 md:grid md:grid-cols-3 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-3 2xl:grid 2xl:grid-cols-3">
       {routes.map((route: any) => (
         <div
           key={ route.id }

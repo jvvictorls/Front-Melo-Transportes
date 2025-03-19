@@ -25,11 +25,11 @@ api.interceptors.response.use(
     if (!error.response) {
       return Promise.reject(error);
     }
-    if (error.response.status === 401) {
+    if (error.response.status === 401 || error.response.status === 403) {
       try {
         const { data } = await api.post('/auth/refresh-token');
         error.config.headers.Authorization = `Bearer ${data}`;
-        sessionStorage.setItem('accessToken', data);
+        localStorage.setItem('accessToken', data);
         return await api(error.config);
       } catch (e: any) {
         if (e.response.data.message === 'missing refresh-token') {
