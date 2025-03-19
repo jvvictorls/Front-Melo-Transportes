@@ -15,8 +15,8 @@ export default function RequestRoute() {
   const [apiData, setApiData] = useState([]);
   const [collaborators, setCollaborators] = useState(['']);
   const [formData, setFormData] = useState<FormData>({
-    origin: '',
-    destination: '',
+    origin: ' ',
+    destination: ' ',
     costCenter: '',
     collaborators: [],
     date: new Date(),
@@ -66,8 +66,8 @@ export default function RequestRoute() {
     || formDatatoDb.time === ''
     || formDatatoDb.collaborators.length === 0) {
       setErroFields([
-        formDatatoDb.origin === '' ? 'Origem' : '',
-        formDatatoDb.destination === '' ? 'Destino' : '',
+        formDatatoDb.origin === ' ' ? 'Origem' : '',
+        formDatatoDb.destination === ' ' ? 'Destino' : '',
         formDatatoDb.costCenter === '' ? 'Centro de Custo' : '',
         !formDatatoDb.date ? 'Data' : '',
         formDatatoDb.time === '' ? 'Hora' : '',
@@ -110,10 +110,11 @@ export default function RequestRoute() {
   };
 
   useEffect(() => {
-    const userId = localStorage.getItem('id');
-    if (!userId) navigate('/login');
-    handleChange({ target: { name: 'userId', value: userId } });
     async function fetchData() {
+      const data = await get('/auth/me');
+      if (!data) navigate('/login');
+      console.log(data);
+      handleChange({ target: { name: 'userId', value: data } });
       const response = await get('/collaborators');
       setApiData(response);
       const collaboratorsName = response.map((employee: any) => employee.name);
@@ -142,70 +143,68 @@ export default function RequestRoute() {
   }, [formData.origin, formData.destination, formData.collaborators]);
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center flex-row lg:mt-10">
+    <div className="flex min-h-screen w-full items-center justify-center flex-col">
       <form
-        className="w-5/6 flex flex-col items-center space-y-6 justify-center py-8"
+        className="flex flex-col w-5/6 2xl:w-6/12 items-center py-8 border border-black border-opacity-10 rounded-xl shadow-xl shadow-indigo-300 shadow-"
         onSubmit={ (e) => e.preventDefault() }
       >
-        <h1 className="text-3xl font-semibold text-gray-800">Solicitar Rota</h1>
+        <h1 className="text-3xl mb-8">Solicitar Rota</h1>
 
-        <div className="w-5/6 flex flex-col space-y-12">
-          <div className="flex space-x-4">
-            <div className="w-1/2">
-              <select
-                value={ formData.origin }
-                onChange={ (e) => handleChange(e) }
-                name="origin"
-                id="origin"
-                className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                hidden={ originInput }
-              >
-                <option value="" disabled selected hidden>Origem</option>
-                <option value="Residência">Residência</option>
-                <option value="Fábrica">Fábrica</option>
-                <option value="Outro">Outro...</option>
-              </select>
+        <div className="w-5/6 flex flex-col space-y-8">
+          <select
+            value={ formData.origin }
+            onChange={ (e) => handleChange(e) }
+            name="origin"
+            id="origin"
+            className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            hidden={ originInput }
+          >
+            <option value="" hidden>Origem</option>
+            <option value="Residência">Residência</option>
+            <option value="Fábrica">Fábrica</option>
+            <option value="Outro">Outro...</option>
+          </select>
 
-              {(formData.origin !== 'Fábrica' && formData.origin !== RESIDENCIA) && (
-                <div className="flex justify-evenly">
-                  <input
-                    type="text"
-                    name="origin"
-                    id="origin"
-                    placeholder="Qual?"
-                    value={ formData.origin }
-                    onChange={ (e) => handleChange(e) }
-                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    hidden={ !originInput }
-                    onClick={ () => setFormData({ ...formData, origin: '' }) }
-                  />
-                </div>
-              )}
-            </div>
-
-            <div className="w-1/2">
-              <select
-                name="destination"
-                id="destination"
-                value={ formData.destination }
-                onChange={ (e) => handleChange(e) }
-                className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                hidden={ destinationInput }
-              >
-                <option value="" disabled selected hidden>Destino</option>
-                <option value="Residência">Residência</option>
-                <option value="Fábrica">Fábrica</option>
-                <option value="Outro">Outro...</option>
-              </select>
-              {
+          {formData.origin !== 'Fábrica'
+           && formData.origin !== RESIDENCIA
+           && formData.origin !== ' ' && (
+             <div className="flex justify-evenly">
+               <input
+                 type="text"
+                 name="origin"
+                 id="origin"
+                 placeholder="Origem?"
+                 value={ formData.origin }
+                 onChange={ (e) => handleChange(e) }
+                 className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                 hidden={ !originInput }
+                 onClick={ () => setFormData({ ...formData, origin: '' }) }
+               />
+             </div>
+          )}
+          <select
+            name="destination"
+            id="destination"
+            value={ formData.destination }
+            onChange={ (e) => handleChange(e) }
+            className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            hidden={ destinationInput }
+          >
+            <option value="" selected hidden>Destino</option>
+            <option value="Residência">Residência</option>
+            <option value="Fábrica">Fábrica</option>
+            <option value="Outro">Outro...</option>
+          </select>
+          {
                 formData.destination !== 'Fábrica'
-                 && formData.destination !== 'Residência' && (
+                 && formData.destination !== 'Residência'
+                 && formData.destination !== ' ' && (
                    <div className="flex justify-evenly">
                      <input
                        type="text"
                        name="destination"
                        id="destination"
-                       placeholder="Qual?"
+                       placeholder="Destino"
                        value={ formData.destination }
                        onChange={ (e) => handleChange(e) }
                        onClick={ () => setFormData({ ...formData, destination: '' }) }
@@ -215,9 +214,6 @@ export default function RequestRoute() {
                    </div>
                 )
               }
-            </div>
-          </div>
-
           {errorOriginDestionation && (
             <span
               className=" rounded-3xl border border-red-400 text-red-400 px-4 py-2 flex flex-row justify-between items-center "
@@ -243,6 +239,22 @@ export default function RequestRoute() {
             </select>
           </div>
 
+          <input
+            type="date"
+            value={ formData.date.toString().slice(0, 10) }
+            onChange={ (e) => handleChange(e) }
+            name="date"
+            id="date"
+            className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="time"
+            name="time"
+            value={ formData.time }
+            onChange={ (e) => handleChange(e) }
+            id="time"
+            className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
           <div className="flex space-x-4">
             <div className="w-full">
               <input
@@ -306,31 +318,12 @@ export default function RequestRoute() {
 
               ))}
             </div>)}
-
-          <div className="flex space-x-4">
-            <input
-              type="date"
-              value={ formData.date.toString().slice(0, 10) }
-              onChange={ (e) => handleChange(e) }
-              name="date"
-              id="date"
-              className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <input
-              type="time"
-              name="time"
-              value={ formData.time }
-              onChange={ (e) => handleChange(e) }
-              id="time"
-              className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
         </div>
 
-        <div className="w-3/4 flex justify-evenly space-x-8">
+        <div className="w-3/4 flex xs:flex-col xs:items-center xs:w-full xs:space-y-8 justify-evenly mt-24 mb-32">
           <button
             type="button"
-            className="bg-red-400 text-white rounded-lg w-32 hover:bg-red-700 transition-colors"
+            className="bg-red-400 text-white py-2 rounded-lg w-32 hover:bg-red-700 transition-colors"
             onClick={ () => navigate('/') }
           >
             Cancelar

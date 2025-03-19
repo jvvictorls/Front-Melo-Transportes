@@ -17,12 +17,14 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
-    "react-router-dom": "^6.15.0"
+    "react-router-dom": "^6.15.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@trybe/eslint-config-frontend": "^1.11.4",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
+    "@types/xlsx": "^0.0.36",
     "@vitejs/plugin-react-swc": "^3.3.2",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",

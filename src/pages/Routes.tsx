@@ -16,9 +16,9 @@ export default function Routes() {
     <div
       className="min-h-screen w-full flex flex-col justify-center items-center"
     >
-      <div className="flex w-1/2 xs:w-5/6 md:w-11/12 lg:w-3/4 xl:w-4/6 flex-col items-center h-full mt-32">
+      <div className="flex w-1/2 xs:w-5/6 md:w-11/12 lg:w-3/4 xl:w-4/6 flex-col items-center h-full py-16 ">
         <h1
-          className="text-3xl mb-8"
+          className="text-3xl mb-9"
         >
           Rotas
         </h1>
