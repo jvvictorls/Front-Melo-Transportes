@@ -11,9 +11,9 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={ <Layout /> }>
-        <Route path="/routes" element={ <RoutesPage /> } />
-        <Route path="/login" element={ <Login /> } />
         <Route path="/dashboard" index element={ <Dashboard /> } />
+        <Route path="/login" element={ <Login /> } />
+        <Route path="/routes" element={ <RoutesPage /> } />
         <Route path="/request" element={ <RequestRoute /> } />
         <Route path="/collaborator/register" element={ <CollaboratorRegister /> } />
         <Route path="/routes/:id" element={ <RoutesDetails /> } />
