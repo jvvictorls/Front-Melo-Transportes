@@ -10,18 +10,45 @@ import ConditionalRender from '../components/ConditionalRender';
 import AddACollaboratorToRouteModal from '../components/AddACollaboratorToRouteModal';
 import ModalEditCollaborator from '../components/ModalEditCollaborator';
 
+function handleColSpan(head: string | null | number, data?: string, editCondition?: boolean) {
+  if (head === 'Última atualização' && editCondition) {
+    return 3;
+  }
+  if (head === 'Ações') {
+    return 2;
+  }
+  if (head === data && editCondition) {
+    return 3;
+  }
+}
+
 export default function RoutesDetails() {
   const [data, setData] = useState<RouteType>();
   const params = useParams();
-  localStorage.setItem('user', JSON.stringify({ type: 'driver' }));
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  const editCondition = user.type === 'driver' || user.type === 'admin';
+  const editCondition = false;
   const [removeCollaborator, setRemoveCollaborator] = useState(false);
   const [addCollaborator, setAddCollaborator] = useState(false);
   const [editCollaborator, setEditCollaborator] = useState(false);
   const [collaboratorToEdit, setCollaboratorToEdit] = useState<CollaboratorsType>(
     {} as CollaboratorsType,
   );
+  const tableHead = [
+    'Identificação',
+    'Empresa',
+    'Motorista',
+    'Máximo de colaboradores',
+    'Lotação atual',
+    'Última atualização',
+  ];
+  const tableSubHead = [
+    'Bairro',
+    'Posição',
+    'Colaboradores',
+    'Telefone',
+    'Departamento',
+    'Horário',
+    editCondition ? 'Ações' : null,
+  ];
   useEffect(() => {
     async function fetchData() {
       try {
@@ -53,77 +80,49 @@ export default function RoutesDetails() {
     data
       ? (
         <div
-          className="min-h-screen w-full flex flex-col justify-center items-center relative mb-4"
+          className="min-h-screen w-full flex flex-col justify-center items-center"
         >
           <div
-            className=" overflow-x-auto flex w-full justify-center h-3/5 xs:justify-normal"
+            className="p-2 my-16 h-3/4 w-1/2 overflow-x-auto flex items-center justify-center bg-white rounded-xl shadow-xl xs:w-11/12 xs:h-1/2 xs:justify-normal sm:justify-normal sm:w-5/6 sm:h-5/6 md:w-3/4 md:h-3/4 md:justify-center lg:w-3/4 lg:h-3/4 lg:justify-center"
           >
 
             <table
-              className="table-auto border-collapse w-5/6"
+              className="table-auto border-collapse w-full h-full "
             >
               <thead>
-                <tr className="border border-black">
-                  <th
-                    className="px-4 border border-black"
-                  >
-                    Identificação
-                  </th>
-                  <th
-                    className="px-4 border border-black"
-                  >
-                    Empresa
-                  </th>
-                  <th
-                    className="px-4 border border-black"
-                  >
-                    Motorista
-                  </th>
-                  <th
-                    className="px-4 border border-black"
-                  >
-                    Máximo de colaboradores
-                  </th>
-                  <th
-                    className="px-4 border border-black"
-                  >
-                    Lotação atual
-                  </th>
-                  <th
-                    colSpan={ 3 }
-                  >
-                    Última atualização
-                  </th>
+                <tr>
+                  {tableHead.map((head) => (
+                    <th
+                      key={ head }
+                      className="border border-black"
+                      colSpan={ handleColSpan(head, undefined, editCondition) }
+                    >
+                      {head}
+                    </th>
+                  ))}
                 </tr>
-                <tr className="text-center border border-black">
-                  <td className="border border-black">{data.name}</td>
-                  <td className="border border-black">{data.client}</td>
-                  <td className="border border-black">{data.driver}</td>
-                  <td className="border border-black">{data.maxCollaborators}</td>
-                  <td className="border border-black">{data.collaborators.length}</td>
-                  <td className="">{convertedDate }</td>
-
+                <tr className="text-center ">
+                  {[data.id, data.client, data.driver, data.maxCollaborators,
+                    data.collaborators.length, convertedDate].map((item) => (
+                      <td
+                        key={ item }
+                        className="border border-black"
+                        colSpan={ handleColSpan(item, convertedDate, editCondition) }
+                      >
+                        {item }
+                      </td>
+                  ))}
                 </tr>
-                <tr
-                  className="border border-black"
-                >
-                  <th className="border border-black">Bairro</th>
-                  <th className="border border-black">Posição</th>
-                  <th className="border border-black">Colaboradores</th>
-                  <th className="border border-black">Telefone</th>
-                  <th className="border border-black">Departamento</th>
-                  <th className="border border-black">Horário</th>
-                  <ConditionalRender
-                    condition={ editCondition }
-                  >
-                    <th className="border border-black">Remover</th>
-                  </ConditionalRender>
-                  <ConditionalRender
-                    condition={ editCondition }
-                  >
-                    <th className="border border-black">Editar</th>
-                  </ConditionalRender>
-
+                <tr>
+                  {tableSubHead.map((head) => (
+                    <th
+                      key={ head }
+                      className={ head === null ? 'border-none' : 'border border-black' }
+                      colSpan={ handleColSpan(head) }
+                    >
+                      {head === null ? null : head }
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody
