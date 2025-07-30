@@ -2,7 +2,7 @@ import { FaCheckCircle, FaBus } from 'react-icons/fa';
 
 function Dashboard() {
   return (
-    <div className="w-full bg-[#E7E9EB] flex flex-col items-center justify-center">
+    <div className="w-full bg-[#E7E9EB] flex flex-col items-center justify-center absolute top-0 left-0">
       <img
         src="src/public/teste.jpg"
         alt="Imagem de exemplo"
