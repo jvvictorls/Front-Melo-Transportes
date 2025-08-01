@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { useParams } from 'react-router-dom';
 import ConditionalRender from './ConditionalRender';
-import { CollaboratorsType } from '../types/collaboratorsType';
+import { CollaboratorsType } from '../types/CollaboratorsType';
 import { get, patch } from '../services/request';
 
 type AddACollaboratorToRouteModalProps = {

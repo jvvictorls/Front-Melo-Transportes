@@ -1,5 +1,18 @@
 import { ReactNode } from 'react';
 
+export type CollaboratorsTypeForDb = {
+  name: string;
+  admissionDate: string;
+  shift: string;
+  phone: string;
+  neighborhood: string;
+  street: string;
+  company: string;
+  department?: string;
+  position?: string;
+
+};
+
 export type CollaboratorsType = {
   id: number;
   name: string;
