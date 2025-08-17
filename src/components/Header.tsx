@@ -22,7 +22,7 @@ function Header() {
             onClick={ () => setSideBar(!sideBar) }
           />
           <Link
-            to="/dashboard"
+            to="/"
             className="flex justify-center items-center"
           >
             <img
@@ -32,7 +32,7 @@ function Header() {
             />
           </Link>
 
-          <nav className="flex flex-1 justify-evenly items-center xs:hidden sm:hidden md:hidden space-x-4">
+          { /* nav className="flex flex-1 justify-evenly items-center xs:hidden sm:hidden md:hidden space-x-4">
             <NavLink
               to="/request"
               className=""
@@ -52,7 +52,7 @@ function Header() {
             >
               Contate-nos
             </NavLink>
-          </nav>
+          </nav>  */}
         </div>
         <ConditionalRender
           condition={ !accessToken }

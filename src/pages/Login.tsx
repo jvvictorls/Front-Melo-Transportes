@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { Navigate, Link } from 'react-router-dom';
+import { Navigate, Link, useNavigate } from 'react-router-dom';
 import { requestLogin } from '../services/request';
 import AuthContext from '../context/AuthContext';
 
@@ -10,15 +10,17 @@ function Login() {
   const [loginError, setLoginError] = useState(false);
   const [seePassword, setSeePassword] = useState(false);
   const { setAccessToken } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const login = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
 
     try {
       const { accessToken } = await requestLogin('/auth/login', { email, password });
       setAccessToken(accessToken);
-      localStorage.setItem('accessToken', accessToken);
       setIsLogged(true);
       setLoginError(false);
+      navigate('/routes');
     } catch (error) {
       console.log(error);
       setIsLogged(false);
@@ -29,7 +31,7 @@ function Login() {
     }
   };
 
-  if (isLogged) return <Navigate to="/dashboard" />;
+  if (isLogged) return <Navigate to="/" />;
 
   return (
     <div className="w-full">
