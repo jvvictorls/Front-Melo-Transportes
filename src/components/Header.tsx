@@ -8,7 +8,7 @@ import AuthContext from '../context/AuthContext';
 function Header() {
   const navigate = useNavigate();
   const [sideBar, setSideBar] = useState(false);
-  const { accessToken } = useContext(AuthContext);
+  const { accessToken, setAccessToken } = useContext(AuthContext);
   return (
     <header
       className="w-full flex items-center justify-center shadow-md z-[1000] fixed  bg-white "
@@ -32,12 +32,12 @@ function Header() {
             />
           </Link>
 
-          { /* nav className="flex flex-1 justify-evenly items-center xs:hidden sm:hidden md:hidden space-x-4">
+          <nav className="flex flex-1 justify-evenly items-center xs:hidden sm:hidden md:hidden space-x-4">
             <NavLink
               to="/request"
               className=""
             >
-              Serviços
+              Solicitar Rota Extra
             </NavLink>
             <NavLink
               to="routes"
@@ -52,7 +52,7 @@ function Header() {
             >
               Contate-nos
             </NavLink>
-          </nav>  */}
+          </nav>
         </div>
         <ConditionalRender
           condition={ !accessToken }
@@ -74,7 +74,21 @@ function Header() {
           </div>
         </ConditionalRender>
       </div>
-
+      <ConditionalRender
+        condition={ !!accessToken }
+      >
+        <div className="flex items-center justify-between mr-4 space-x-4">
+          <button
+            onClick={ () => {
+              setAccessToken(null);
+              navigate('/login');
+            } }
+            className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded"
+          >
+            Sair
+          </button>
+        </div>
+      </ConditionalRender>
       <Sidebar
         isSidebarOpen={ sideBar }
         setSideBar={ setSideBar }
