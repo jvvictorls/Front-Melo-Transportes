@@ -1,6 +1,6 @@
 import { IoMdClose } from 'react-icons/io';
 import { useEffect, useState } from 'react';
-import { CollaboratorsType } from '../types/collaboratorsType';
+import { CollaboratorsType } from '../types/CollaboratorsType';
 import { put } from '../services/request';
 
 type ModalEditCollaboratorProps = {
@@ -29,7 +29,7 @@ function ModalEditCollaborator(props: ModalEditCollaboratorProps) {
 
   return (
     <div
-      className="absolute min-h-screen inset-0 bg-opacity-50 bg-black  flex justify-center items-center "
+      className="absolute min-h-screen inset-0 bg-opacity-50 bg-black  flex justify-center items-center"
     >
       <div className="flex w-full h-full items-center justify-center">
         <div

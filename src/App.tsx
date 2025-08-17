@@ -10,6 +10,7 @@ import ManyCollaboratorRegister from './pages/ManyCollaboratorsRegister';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import Unauthorized from './pages/Unauthorized';
 import Contact from './pages/Contact';
+import SignInPage from './pages/SignInPage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Route path="/" element={ <Layout /> }>
         <Route path="/" index element={ <Home /> } />
         <Route path="/login" element={ <Login /> } />
+        <Route path="/signin" element={ <SignInPage /> } />
         <Route path="/routes" element={ <RoutesPage /> } />
         <Route
           path="/request"

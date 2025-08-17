@@ -4,7 +4,7 @@ import Header from './Header';
 
 function Layout() {
   return (
-    <div className="flex flex-col min-h-screen space-y-16">
+    <div className="flex flex-col min-h-screen ">
       {/* Header */}
       <Header />
 

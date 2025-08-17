@@ -69,7 +69,7 @@ function Login() {
           </button>
           <Link
             className="text-blue-500 hover:text-blue-700 underline"
-            to="/register"
+            to="/signin"
           >
             Ainda não tenho conta
           </Link>
