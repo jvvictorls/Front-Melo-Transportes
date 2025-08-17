@@ -14,6 +14,7 @@ function AddCollaboratorForm({ setModal }: AddCollaboratorFormProps) {
     number: '',
     city: '',
     phone: '',
+    shift: '',
     company: '',
     department: '',
     position: '',

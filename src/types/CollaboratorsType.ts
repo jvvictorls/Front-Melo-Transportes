@@ -5,6 +5,7 @@ export type CollaboratorsTypeForDb = {
   admissionDate: string;
   shift: string;
   phone: string;
+  city: string;
   neighborhood: string;
   street: string;
   company: string;

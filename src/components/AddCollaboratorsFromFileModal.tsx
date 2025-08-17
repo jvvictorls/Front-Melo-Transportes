@@ -24,12 +24,15 @@ async function handleFileAsync() {
     name: row[1],
     shift: row[2],
     phone: row[3],
-    street: row[4],
-    neighborhood: row[5],
-    company: row[6],
-    department: row[7],
-    position: row[8],
-  }));
+    city: row[4],
+    street: row[5],
+    neighborhood: row[6],
+    company: row[7],
+    department: row[8],
+    position: row[9],
+  })).filter((collaborator) => {
+    return Object.values(collaborator).every((value) => value !== undefined && value !== '');
+  });
   return tabledData;
 }
 
