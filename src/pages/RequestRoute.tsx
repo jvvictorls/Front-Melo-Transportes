@@ -1,11 +1,13 @@
 /* eslint-disable max-lines */
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { FormData } from '../types/FormData';
 import { get, post } from '../services/request';
 import Modal from '../components/modal';
+import AuthContext from '../context/AuthContext';
 
 export default function RequestRoute() {
+  const { accessToken } = useContext(AuthContext);
   const [user, setUser] = useState({
     name: '',
     id: '',

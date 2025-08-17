@@ -1,59 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import { BsPencil, BsPlus, BsTrash } from 'react-icons/bs';
 import { get, patch } from '../services/request';
 import { RouteType } from '../types/Routes';
 import sortRouteCollaborators from '../utils/sortRouteCollaborators';
-import { CollaboratorsType } from '../types/collaboratorsType';
+import { CollaboratorsType } from '../types/CollaboratorsType';
 import ConditionalRender from '../components/ConditionalRender';
 import AddACollaboratorToRouteModal from '../components/AddACollaboratorToRouteModal';
 import ModalEditCollaborator from '../components/ModalEditCollaborator';
-
-function handleColSpan(head: string | null | number, data?: string, editCondition?: boolean) {
-  if (head === 'Última atualização' && editCondition) {
-    return 3;
-  }
-  if (head === 'Ações') {
-    return 2;
-  }
-  if (head === data && editCondition) {
-    return 3;
-  }
-}
+import AuthContext from '../context/AuthContext';
 
 export default function RoutesDetails() {
+  const { user } = useContext(AuthContext);
   const [data, setData] = useState<RouteType>();
   const params = useParams();
-  const editCondition = false;
+  const editCondition = user?.type === 'driver' || user?.type === 'admin';
   const [removeCollaborator, setRemoveCollaborator] = useState(false);
   const [addCollaborator, setAddCollaborator] = useState(false);
   const [editCollaborator, setEditCollaborator] = useState(false);
   const [collaboratorToEdit, setCollaboratorToEdit] = useState<CollaboratorsType>(
     {} as CollaboratorsType,
   );
-  const tableHead = [
-    'Identificação',
-    'Empresa',
-    'Motorista',
-    'Máximo de colaboradores',
-    'Lotação atual',
-    'Última atualização',
-  ];
-  const tableSubHead = [
-    'Bairro',
-    'Posição',
-    'Colaboradores',
-    'Telefone',
-    'Departamento',
-    'Horário',
-    editCondition ? 'Ações' : null,
-  ];
+
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await get(`/routes/${params.id}`);
-        console.log(response);
         setData(response);
       } catch (error) {
         console.log(error);
@@ -61,157 +34,143 @@ export default function RoutesDetails() {
     }
     fetchData();
   }, [editCollaborator, removeCollaborator, params.id]);
+
   const convertedDate = data?.updatedAt ? moment(data.updatedAt).format('DD/MM/YYYY HH:mm') : '';
 
   if (data) {
     sortRouteCollaborators(data);
   }
 
-  function handleEditUser(collaborator: CollaboratorsType) {
-    setCollaboratorToEdit(collaborator);
-    setEditCollaborator(true);
-  }
   async function handleDelete(collaborator: CollaboratorsType) {
     setRemoveCollaborator(true);
     await patch(`/routes/${params.id}/remove/${collaborator.id}`);
     setRemoveCollaborator(false);
   }
-  return (
-    data
-      ? (
-        <div
-          className="min-h-screen w-full flex flex-col justify-center items-center"
-        >
-          <div
-            className="p-2 my-16 h-3/4 w-1/2 overflow-x-auto flex items-center justify-center bg-white rounded-xl shadow-xl xs:w-11/12 xs:h-1/2 xs:justify-normal sm:justify-normal sm:w-5/6 sm:h-5/6 md:w-3/4 md:h-3/4 md:justify-center lg:w-3/4 lg:h-3/4 lg:justify-center"
-          >
 
-            <table
-              className="table-auto border-collapse w-full h-full "
-            >
-              <thead>
-                <tr>
-                  {tableHead.map((head) => (
-                    <th
-                      key={ head }
-                      className="border border-black"
-                      colSpan={ handleColSpan(head, undefined, editCondition) }
-                    >
-                      {head}
-                    </th>
-                  ))}
-                </tr>
-                <tr className="text-center ">
-                  {[data.id, data.client, data.driver, data.maxCollaborators,
-                    data.collaborators.length, convertedDate].map((item) => (
-                      <td
-                        key={ item }
-                        className="border border-black"
-                        colSpan={ handleColSpan(item, convertedDate, editCondition) }
-                      >
-                        {item }
-                      </td>
-                  ))}
-                </tr>
-                <tr>
-                  {tableSubHead.map((head) => (
-                    <th
-                      key={ head }
-                      className={ head === null ? 'border-none' : 'border border-black' }
-                      colSpan={ handleColSpan(head) }
-                    >
-                      {head === null ? null : head }
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody
-                className="text-center"
-              >
-                {data.collaborators.map((collaborator: CollaboratorsType, index) => (
-                  <tr
-                    key={ collaborator.id }
-                    className=""
-                  >
-                    <td className="border border-black">{collaborator.neighborhood}</td>
-                    <td className="border border-black">{index + 1}</td>
-                    <td className="border border-black">{collaborator.name}</td>
-                    <td className="border border-black">{collaborator.phone}</td>
-                    <td className="border border-black">{collaborator.department}</td>
-                    <td className="border border-black">{collaborator.boardingTime}</td>
-                    <ConditionalRender
-                      condition={ editCondition }
-                    >
-                      <td
-                        className="border border-black place-items-center"
-                      >
-                        {' '}
-                        <BsTrash
-                          className="text-red-700 cursor-pointer"
-                          onClick={
-                            () => handleDelete(collaborator)
-                          }
-                        />
-                      </td>
-                    </ConditionalRender>
-                    <ConditionalRender
-                      condition={ editCondition }
-                    >
-                      <td
-                        className="border border-black place-items-center"
-                      >
-                        {' '}
-                        <BsPencil
-                          className="text-yellow-700 cursor-pointer"
-                          onClick={ () => handleEditUser(collaborator) }
-                        />
-                      </td>
-                    </ConditionalRender>
+  function handleEditUser(collaborator: CollaboratorsType) {
+    setCollaboratorToEdit(collaborator);
+    setEditCollaborator(true);
+  }
 
-                  </tr>
-                ))}
-                <ConditionalRender
-                  condition={ editCondition }
-                >
-                  { data.collaborators.length < data.maxCollaborators && (
-                    <tr className="h-20">
-                      <td className="" colSpan={ 6 }>
-                        <button
-                          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                          onClick={ () => setAddCollaborator(true) }
-                        >
-                          {' '}
-                          <BsPlus />
-                        </button>
-                      </td>
-                    </tr>
-                  )}
-                </ConditionalRender>
-
-              </tbody>
-            </table>
-          </div>
-          <ConditionalRender
-            condition={ addCollaborator }
-          >
-
-            <AddACollaboratorToRouteModal
-              onClose={ () => setAddCollaborator(false) }
-              routeCollaborators={ data.collaborators }
-            />
-          </ConditionalRender>
-          <ModalEditCollaborator
-            open={ editCollaborator }
-            onClose={ () => setEditCollaborator(false) }
-            collaborator={ collaboratorToEdit }
-          />
-        </div>)
-      : (
-        <div
-          className="min-h-screen flex justify-center items-center w-full"
-        >
-          <p>Carregando...</p>
+  return data ? (
+    <div className="min-h-screen max-w-full flex flex-col items-center py-12 px-4 bg-gray-100">
+      {/* Card principal */}
+      <div className="w-full max-w-6xl bg-white rounded-2xl shadow-lg p-8 space-y-6">
+        {/* Cabeçalho */}
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center border-b pb-4">
+          <h1 className="text-2xl font-bold text-gray-800">Detalhes da Rota</h1>
+          <p className="text-sm text-gray-500">
+            Última atualização:
+            {' '}
+            {convertedDate || '---'}
+          </p>
         </div>
-      )
+
+        {/* Informações principais da rota */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="bg-gray-50 p-4 rounded-xl">
+            <p className="text-sm text-gray-500">Identificação</p>
+            <p className="text-lg font-semibold">{data.id}</p>
+          </div>
+          <div className="bg-gray-50 p-4 rounded-xl">
+            <p className="text-sm text-gray-500">Empresa</p>
+            <p className="text-lg font-semibold">{data.client}</p>
+          </div>
+          <div className="bg-gray-50 p-4 rounded-xl">
+            <p className="text-sm text-gray-500">Motorista</p>
+            <p className="text-lg font-semibold">{data.driver}</p>
+          </div>
+          <div className="bg-gray-50 p-4 rounded-xl">
+            <p className="text-sm text-gray-500">Máximo de Colaboradores</p>
+            <p className="text-lg font-semibold">{data.maxCollaborators}</p>
+          </div>
+          <div className="bg-gray-50 p-4 rounded-xl">
+            <p className="text-sm text-gray-500">Lotação Atual</p>
+            <p className="text-lg font-semibold">{data.collaborators.length}</p>
+          </div>
+        </div>
+
+        {/* Tabela de colaboradores */}
+        <div className="overflow-x-auto max-w-full">
+          <table className="w-full text-sm text-left text-gray-500">
+            <thead>
+              <tr className="bg-gray-100 text-left">
+                <th className="px-4 py-3 text-sm font-semibold text-gray-700">Bairro</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-700">Posição</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-700">Colaborador</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-700">Telefone</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-700">Departamento</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-700">Horário</th>
+                {editCondition && (
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-700 text-center">
+                    Ações
+                  </th>
+                )}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 ">
+              {data.collaborators.map((collaborator, index) => (
+                <tr key={ collaborator.id } className="hover:bg-gray-50 transition">
+                  <td className="px-4 py-3">{collaborator.neighborhood}</td>
+                  <td className="px-4 py-3">{index + 1}</td>
+                  <td className="px-4 py-3 font-medium text-gray-800">{collaborator.name}</td>
+                  <td className="px-4 py-3">{collaborator.phone}</td>
+                  <td className="px-4 py-3">{collaborator.department}</td>
+                  <td className="px-4 py-3">{collaborator.boardingTime}</td>
+                  {editCondition && (
+                    <td className="px-4 py-3 flex space-x-4 justify-center">
+                      {' '}
+                      <BsTrash
+                        className="text-red-500 hover:text-red-700 cursor-pointer"
+                        onClick={ () => handleDelete(collaborator) }
+                      />
+                      <BsPencil
+                        className="text-yellow-500 hover:text-yellow-700 cursor-pointer"
+                        onClick={ () => handleEditUser(collaborator) }
+                      />
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Botão de adicionar */}
+        <ConditionalRender
+          condition={
+          editCondition && data.collaborators.length < data.maxCollaborators
+          }
+        >
+          <div className="flex justify-center">
+            <button
+              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+              onClick={ () => setAddCollaborator(true) }
+            >
+              <BsPlus className="mr-2" />
+              {' '}
+              Adicionar Colaborador
+            </button>
+          </div>
+        </ConditionalRender>
+      </div>
+
+      {/* Modais */}
+      <ConditionalRender condition={ addCollaborator }>
+        <AddACollaboratorToRouteModal
+          onClose={ () => setAddCollaborator(false) }
+          routeCollaborators={ data.collaborators }
+        />
+      </ConditionalRender>
+      <ModalEditCollaborator
+        open={ editCollaborator }
+        onClose={ () => setEditCollaborator(false) }
+        collaborator={ collaboratorToEdit }
+      />
+    </div>
+  ) : (
+    <div className="min-h-screen flex justify-center items-center">
+      <p className="text-gray-600">Carregando...</p>
+    </div>
   );
 }

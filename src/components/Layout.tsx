@@ -9,10 +9,10 @@ function Layout() {
       <Header />
 
       {/* Main Content + Sidebar se quiser */}
-      <div className="flex flex-1">
+      <div className="flex flex-1 max-w-full">
 
         {/* Conteúdo principal */}
-        <main className="flex-1">
+        <main className="flex-1 max-w-full">
           <Outlet />
         </main>
       </div>
