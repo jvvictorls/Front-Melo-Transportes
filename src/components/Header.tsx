@@ -11,7 +11,7 @@ function Header() {
   const { accessToken, setAccessToken } = useContext(AuthContext);
   return (
     <header
-      className="w-full flex items-center justify-center shadow-md z-[1000] fixed  bg-white "
+      className="w-full flex items-center justify-center shadow-md z-[1000] bg-white "
     >
       <div className="xs:w-full sm:w-full md:w-full lg:w-3/4 xl:w-2/3 2xl:w-1/2 flex justify-between h-full ">
         <div
