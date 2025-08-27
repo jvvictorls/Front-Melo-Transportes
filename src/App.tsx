@@ -14,7 +14,7 @@ import SignInPage from './pages/SignInPage';
 import InConstructionPage from './components/InConstructionPage';
 
 const adminTypes = ['admin', 'supervisor', 'coordinator', 'manager', 'superadmin'];
-const allTypes = ['admin', 'supervisor', 'coordinator', 'manager', 'superadmin', 'user'];
+const allTypes = ['admin', 'supervisor', 'coordinator', 'manager', 'superadmin', 'user', 'driver'];
 function App() {
   return (
     <Routes>
@@ -25,7 +25,9 @@ function App() {
         <Route
           path="/routes"
           element={
-            <ProtectedRoutes>
+            <ProtectedRoutes
+              allowedTypes={ allTypes }
+            >
               <RoutesPage />
             </ProtectedRoutes>
         }

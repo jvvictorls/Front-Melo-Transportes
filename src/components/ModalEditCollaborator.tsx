@@ -1,30 +1,36 @@
 import { IoMdClose } from 'react-icons/io';
-import { useEffect, useState } from 'react';
-import { CollaboratorsType } from '../types/CollaboratorsType';
+import { CollaboratorsRoutesType } from '../types/CollaboratorsType';
 import { put } from '../services/request';
 
 type ModalEditCollaboratorProps = {
   open: boolean;
   onClose: () => void;
-  collaborator: CollaboratorsType;
+  collaborator: CollaboratorsRoutesType;
+  setEditCollaborator: (collaborator: CollaboratorsRoutesType) => void;
 };
 
 function ModalEditCollaborator(props: ModalEditCollaboratorProps) {
-  const { collaborator, open, onClose } = props;
-  const [editCollaborator, setEditCollaborator] = useState<CollaboratorsType>(collaborator);
-  useEffect(() => {
-    setEditCollaborator(collaborator);
-  }, [collaborator]);
+  const { collaborator, open, onClose, setEditCollaborator } = props;
   if (!open) {
     return null;
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setEditCollaborator({ ...collaborator, [e.target.name]: e.target.value });
+    setEditCollaborator(
+      { ...collaborator,
+        [e.target.name]: e.target.value,
+        routes_collaborators: {
+          ...collaborator.routes_collaborators,
+          [e.target.name]: e.target.value,
+        },
+      },
+
+    );
   }
 
   async function handleSave() {
-    await put(`/collaborators/${collaborator.id}`, editCollaborator);
+    await put(`/collaborators/${collaborator.id}`, collaborator);
+    onClose();
   }
 
   return (
@@ -66,7 +72,7 @@ function ModalEditCollaborator(props: ModalEditCollaboratorProps) {
                   className="border border-gray-400 rounded-md pl-4 py-2 cursor-not-allowed"
                   type="text"
                   id="name"
-                  value={ editCollaborator.name }
+                  value={ collaborator.name }
                   disabled
                 />
               </div>
@@ -80,7 +86,7 @@ function ModalEditCollaborator(props: ModalEditCollaboratorProps) {
                   className="border border-gray-400 rounded-md pl-4 py-2 cursor-text"
                   id="neighborhood"
                   name="neighborhood"
-                  value={ editCollaborator.neighborhood }
+                  value={ collaborator.neighborhood }
                   onChange={ (e) => handleChange(e) }
                 />
               </div>
@@ -94,26 +100,26 @@ function ModalEditCollaborator(props: ModalEditCollaboratorProps) {
                   id="phone"
                   name="phone"
                   className="border border-gray-400 rounded-md pl-4 py-2 cursor-text"
-                  value={ editCollaborator.phone }
+                  value={ collaborator.phone }
                   onChange={ (e) => {
                     handleChange(e);
                   } }
-                  placeholder="(00) 00000-0000"
+                  placeholder="(00) 0 0000-0000"
                 />
               </div>
               <div className="flex flex-col">
 
                 <label
-                  htmlFor="boardingTime"
+                  htmlFor="boarding_time"
                 >
                   Horário:
                 </label>
                 <input
                   type="time"
-                  id="boardingTime"
+                  id="boarding_time"
                   name="boardingTime"
                   className="text-center border border-gray-400 rounded-md pl-4 py-2 cursor-pointer place-items-center"
-                  value={ editCollaborator.boardingTime }
+                  value={ collaborator.routes_collaborators.boardingTime }
                   onChange={ (e) => handleChange(e) }
                 />
               </div>

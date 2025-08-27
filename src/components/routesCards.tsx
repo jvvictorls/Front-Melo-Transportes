@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import { RouteType } from '../types/Routes';
+import { RouteFromDb } from '../types/RoutesTypes';
 
 type RoutesCardsProps = {
-  routes: RouteType[]
+  routes: RouteFromDb[]
 };
 export default function RoutesCards({ routes }: RoutesCardsProps) {
   const navigate = useNavigate();

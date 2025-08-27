@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import { BsPencil, BsPlus, BsTrash } from 'react-icons/bs';
 import { get, patch } from '../services/request';
-import { RouteType } from '../types/Routes';
+import { RouteFromDb } from '../types/RoutesTypes';
 import sortRouteCollaborators from '../utils/sortRouteCollaborators';
-import { CollaboratorsType } from '../types/CollaboratorsType';
+import { CollaboratorsRoutesType } from '../types/CollaboratorsType';
 import ConditionalRender from '../components/ConditionalRender';
 import AddACollaboratorToRouteModal from '../components/AddACollaboratorToRouteModal';
 import ModalEditCollaborator from '../components/ModalEditCollaborator';
@@ -13,21 +13,23 @@ import AuthContext from '../context/AuthContext';
 
 export default function RoutesDetails() {
   const { user } = useContext(AuthContext);
-  const [data, setData] = useState<RouteType>();
+  const [data, setData] = useState<RouteFromDb>();
   const params = useParams();
   const editCondition = user?.type === 'driver' || user?.type === 'admin';
   const [removeCollaborator, setRemoveCollaborator] = useState(false);
   const [addCollaborator, setAddCollaborator] = useState(false);
   const [editCollaborator, setEditCollaborator] = useState(false);
-  const [collaboratorToEdit, setCollaboratorToEdit] = useState<CollaboratorsType>(
-    {} as CollaboratorsType,
+  const [collaboratorToEdit, setCollaboratorToEdit] = useState<CollaboratorsRoutesType>(
+    {} as CollaboratorsRoutesType,
   );
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await get(`/routes/${params.id}`);
+        const response: RouteFromDb = await get(`/routes/${params.id}`);
+        sortRouteCollaborators(response);
         setData(response);
+        console.log(response);
       } catch (error) {
         console.log(error);
       }
@@ -37,17 +39,13 @@ export default function RoutesDetails() {
 
   const convertedDate = data?.updatedAt ? moment(data.updatedAt).format('DD/MM/YYYY HH:mm') : '';
 
-  if (data) {
-    sortRouteCollaborators(data);
-  }
-
-  async function handleDelete(collaborator: CollaboratorsType) {
+  async function handleDelete(collaborator: CollaboratorsRoutesType) {
     setRemoveCollaborator(true);
     await patch(`/routes/${params.id}/remove/${collaborator.id}`);
     setRemoveCollaborator(false);
   }
 
-  function handleEditUser(collaborator: CollaboratorsType) {
+  function handleEditUser(collaborator: CollaboratorsRoutesType) {
     setCollaboratorToEdit(collaborator);
     setEditCollaborator(true);
   }
@@ -116,7 +114,7 @@ export default function RoutesDetails() {
                   <td className="px-4 py-3 font-medium text-gray-800">{collaborator.name}</td>
                   <td className="px-4 py-3">{collaborator.phone}</td>
                   <td className="px-4 py-3">{collaborator.department}</td>
-                  <td className="px-4 py-3">{collaborator.boardingTime}</td>
+                  <td className="px-4 py-3">{collaborator.routes_collaborators.boardingTime}</td>
                   {editCondition && (
                     <td className="px-4 py-3 flex space-x-4 justify-center">
                       {' '}
@@ -166,6 +164,7 @@ export default function RoutesDetails() {
         open={ editCollaborator }
         onClose={ () => setEditCollaborator(false) }
         collaborator={ collaboratorToEdit }
+        setEditCollaborator={ setCollaboratorToEdit }
       />
     </div>
   ) : (

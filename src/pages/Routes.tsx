@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { get } from '../services/request';
 import RoutesCards from '../components/routesCards';
+import { RouteFromDb } from '../types/RoutesTypes';
 
 export default function Routes() {
-  const [apiResponse, setApiResponse] = useState([]);
+  const [apiResponse, setApiResponse] = useState<RouteFromDb[]>([]);
   useEffect(() => {
     async function fetchData() {
-      const data = await get('/routes');
+      const data: RouteFromDb[] = await get('/routes');
       setApiResponse(data);
     }
     fetchData();
   }, []);
-  console.log(apiResponse);
   return (
     <div
       className="min-h-screen w-full flex flex-col justify-center items-center"

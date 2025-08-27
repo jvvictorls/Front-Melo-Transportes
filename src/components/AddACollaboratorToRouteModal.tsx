@@ -2,20 +2,20 @@ import { useState, useEffect } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { useParams } from 'react-router-dom';
 import ConditionalRender from './ConditionalRender';
-import { CollaboratorsType } from '../types/CollaboratorsType';
+import { CollaboratorsRoutesType } from '../types/CollaboratorsType';
 import { get, patch } from '../services/request';
 
 type AddACollaboratorToRouteModalProps = {
   onClose: () => void;
-  routeCollaborators: CollaboratorsType[];
+  routeCollaborators: CollaboratorsRoutesType[];
 };
 
 function AddACollaboratorToRouteModal({ onClose, routeCollaborators }
 : AddACollaboratorToRouteModalProps) {
-  const [collaborators, setCollaborators] = useState<CollaboratorsType[]>([]);
+  const [collaborators, setCollaborators] = useState<CollaboratorsRoutesType[]>([]);
   const [search, setSearch] = useState('');
-  const [collaboratorToAdd, setCollaboratorToAdd] = useState<CollaboratorsType>();
-  const [collaboratorToRemove, setCollaboratorToRemove] = useState<CollaboratorsType[]>(
+  const [collaboratorToAdd, setCollaboratorToAdd] = useState<CollaboratorsRoutesType>();
+  const [collaboratorToRemove, setCollaboratorToRemove] = useState<CollaboratorsRoutesType[]>(
     routeCollaborators,
   );
   const params = useParams();
