@@ -29,7 +29,6 @@ export default function RoutesDetails() {
         const response: RouteFromDb = await get(`/routes/${params.id}`);
         sortRouteCollaborators(response);
         setData(response);
-        console.log(response);
       } catch (error) {
         console.log(error);
       }
