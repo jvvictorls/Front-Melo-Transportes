@@ -1,8 +1,10 @@
 import { IoMdClose } from 'react-icons/io';
 import { CollaboratorsRoutesType } from '../types/CollaboratorsType';
-import { put } from '../services/request';
+import { patch, put } from '../services/request';
 
 type ModalEditCollaboratorProps = {
+  setUpdateRoute: (value: boolean) => void;
+  routeId: string
   open: boolean;
   onClose: () => void;
   collaborator: CollaboratorsRoutesType;
@@ -10,7 +12,7 @@ type ModalEditCollaboratorProps = {
 };
 
 function ModalEditCollaborator(props: ModalEditCollaboratorProps) {
-  const { collaborator, open, onClose, setEditCollaborator } = props;
+  const { collaborator, open, onClose, setEditCollaborator, routeId, setUpdateRoute } = props;
   if (!open) {
     return null;
   }
@@ -29,7 +31,10 @@ function ModalEditCollaborator(props: ModalEditCollaboratorProps) {
   }
 
   async function handleSave() {
-    await put(`/collaborators/${collaborator.id}`, collaborator);
+    setUpdateRoute(true);
+    await put(`/collaborators/${collaborator.id}`, collaborator)
+      .then(() => patch(`routes/${routeId}/last-update`, { updatedAt: new Date() }));
+    setUpdateRoute(false);
     onClose();
   }
 

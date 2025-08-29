@@ -6,33 +6,35 @@ import { CollaboratorsRoutesType } from '../types/CollaboratorsType';
 import { get, patch } from '../services/request';
 
 type AddACollaboratorToRouteModalProps = {
+  setUpdateRoute: (value: boolean) => void;
   onClose: () => void;
   routeCollaborators: CollaboratorsRoutesType[];
 };
 
-function AddACollaboratorToRouteModal({ onClose, routeCollaborators }
+function AddACollaboratorToRouteModal({ onClose, routeCollaborators, setUpdateRoute }
 : AddACollaboratorToRouteModalProps) {
   const [collaborators, setCollaborators] = useState<CollaboratorsRoutesType[]>([]);
   const [search, setSearch] = useState('');
   const [collaboratorToAdd, setCollaboratorToAdd] = useState<CollaboratorsRoutesType>();
-  const [collaboratorToRemove, setCollaboratorToRemove] = useState<CollaboratorsRoutesType[]>(
-    routeCollaborators,
-  );
   const params = useParams();
+
   useEffect(() => {
     async function fetchData() {
       const response = await get('/collaborators');
-      setCollaborators(response);
+      const filteredResponse = response.filter((collaborator: CollaboratorsRoutesType) => (
+        !routeCollaborators.some((routeCollab) => routeCollab.id === collaborator.id)
+      ));
+      setCollaborators(filteredResponse);
     }
     fetchData();
-  }, []);
-  console.log(collaboratorToRemove);
-  function handleAddCollaborator() {
+  }, [routeCollaborators]);
+
+  async function handleAddCollaborator() {
     if (!collaboratorToAdd) return;
-    patch(`/routes/${params.id}/add/${collaboratorToAdd.id}`);
-    window.alert('Colaborador adicionado com sucesso!');
+    await patch(`/routes/${params.id}/add/${collaboratorToAdd.id}`);
+    setUpdateRoute(true);
+    setTimeout(() => setUpdateRoute(false), 1000);
     onClose();
-    window.location.reload();
   }
 
   return (

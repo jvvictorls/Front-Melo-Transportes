@@ -19,6 +19,7 @@ export default function RoutesDetails() {
   const [removeCollaborator, setRemoveCollaborator] = useState(false);
   const [addCollaborator, setAddCollaborator] = useState(false);
   const [editCollaborator, setEditCollaborator] = useState(false);
+  const [updateRoute, setUpdateRoute] = useState<boolean>(false);
   const [collaboratorToEdit, setCollaboratorToEdit] = useState<CollaboratorsRoutesType>(
     {} as CollaboratorsRoutesType,
   );
@@ -30,17 +31,29 @@ export default function RoutesDetails() {
         sortRouteCollaborators(response);
         setData(response);
       } catch (error) {
-        console.log(error);
+        // Handle error
+        console.error('Error fetching route details:', error);
       }
     }
     fetchData();
-  }, [editCollaborator, removeCollaborator, params.id]);
+  }, [params.id, removeCollaborator, editCollaborator, addCollaborator]);
+
+  useEffect(() => {
+    async function patchRoute() {
+      if (updateRoute) {
+        await patch(`/routes/${params.id}/last-update`, { updatedAt: new Date() });
+      }
+    }
+    patchRoute();
+  }, [updateRoute, params.id]);
 
   const convertedDate = data?.updatedAt ? moment(data.updatedAt).format('DD/MM/YYYY HH:mm') : '';
 
   async function handleDelete(collaborator: CollaboratorsRoutesType) {
     setRemoveCollaborator(true);
+    setUpdateRoute(true);
     await patch(`/routes/${params.id}/remove/${collaborator.id}`);
+    setUpdateRoute(false);
     setRemoveCollaborator(false);
   }
 
@@ -155,11 +168,14 @@ export default function RoutesDetails() {
       {/* Modais */}
       <ConditionalRender condition={ addCollaborator }>
         <AddACollaboratorToRouteModal
+          setUpdateRoute={ setUpdateRoute }
           onClose={ () => setAddCollaborator(false) }
           routeCollaborators={ data.collaborators }
         />
       </ConditionalRender>
       <ModalEditCollaborator
+        setUpdateRoute={ setUpdateRoute }
+        routeId={ params.id as string }
         open={ editCollaborator }
         onClose={ () => setEditCollaborator(false) }
         collaborator={ collaboratorToEdit }
