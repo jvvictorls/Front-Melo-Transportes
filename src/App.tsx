@@ -12,9 +12,10 @@ import Unauthorized from './pages/Unauthorized';
 import Contact from './pages/Contact';
 import SignInPage from './pages/SignInPage';
 import InConstructionPage from './components/InConstructionPage';
+import Suplies from './pages/Suplies';
 
 const adminTypes = ['admin', 'supervisor', 'coordinator', 'manager', 'superadmin'];
-const allTypes = ['admin', 'supervisor', 'coordinator', 'manager', 'superadmin', 'user', 'driver'];
+const allTypes = ['admin', 'supervisor', 'coordinator', 'manager', 'superadmin', 'user', 'driver', 'superadmin'];
 function App() {
   return (
     <Routes>
@@ -75,6 +76,16 @@ function App() {
               allowedTypes={ allTypes }
             >
               <RoutesDetails />
+            </ProtectedRoutes>
+        }
+        />
+        <Route
+          path="/suplies"
+          element={
+            <ProtectedRoutes
+              allowedTypes={ adminTypes }
+            >
+              <Suplies />
             </ProtectedRoutes>
         }
         />

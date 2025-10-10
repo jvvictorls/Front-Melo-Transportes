@@ -20,7 +20,7 @@ function Login() {
       setAccessToken(accessToken);
       setIsLogged(true);
       setLoginError(false);
-      navigate('/routes');
+      navigate('/');
     } catch (error) {
       console.log(error);
       setIsLogged(false);

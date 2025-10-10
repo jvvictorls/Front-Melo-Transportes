@@ -45,7 +45,12 @@ function Header() {
             >
               Rotas
             </NavLink>
-
+            <NavLink
+              to="suplies"
+              className=""
+            >
+              Abastecimentos
+            </NavLink>
             <NavLink
               to="contact"
               className=""
