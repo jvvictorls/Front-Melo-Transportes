@@ -1,6 +1,6 @@
 function Footer() {
   return (
-    <footer className="flex justify-center w-full bg-blue-700 sticky bottom-0">
+    <footer className="flex justify-center w-full bg-blue-700 bottom-0">
       <p
         className="text-justify text-white p-4"
       >

@@ -145,12 +145,12 @@ export default function RequestRoute() {
   }, [formData.origin, formData.destination, formData.collaborators]);
 
   return (
-    <div className="flex min-h-screen w-full items-center flex-col justify-center bg-gray-200">
+    <div className="flex w-full items-center flex-col justify-center">
       <form
-        className="flex flex-col bg-white w-1/2 xs:w-full items-center py-8 border border-black border-opacity-10 rounded-xl shadow-xl shadow-indigo-300"
+        className="flex flex-col bg-white w-1/2 xs:w-full items-center border border-black border-opacity-10 rounded-xl shadow-xl shadow-indigo-300 lg:mt-8 xl:mt-8 2xl:mt-8"
         onSubmit={ (e) => e.preventDefault() }
       >
-        <h1 className="text-3xl mb-8">Solicitar Rota</h1>
+        <h1 className="text-3xl my-8">Solicitar Rota</h1>
 
         <div className="w-5/6 flex flex-col space-y-8">
           <select

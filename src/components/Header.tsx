@@ -7,6 +7,9 @@ import AuthContext from '../context/AuthContext';
 
 function Header() {
   const navigate = useNavigate();
+  const token = localStorage.getItem('accessToken');
+  const userType = token ? JSON.parse(atob(token.split('.')[1])).type : null;
+  console.log(userType);
   const [sideBar, setSideBar] = useState(false);
   const { accessToken, setAccessToken } = useContext(AuthContext);
   return (
@@ -45,12 +48,16 @@ function Header() {
             >
               Rotas
             </NavLink>
-            <NavLink
-              to="suplies"
-              className=""
+            <ConditionalRender
+              condition={ userType === 'admin' || userType === 'superadmin' }
             >
-              Abastecimentos
-            </NavLink>
+              <NavLink
+                to="suplies"
+                className=""
+              >
+                Abastecimentos
+              </NavLink>
+            </ConditionalRender>
             <NavLink
               to="contact"
               className=""

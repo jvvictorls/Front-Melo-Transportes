@@ -63,7 +63,7 @@ export default function RoutesDetails() {
   }
 
   return data ? (
-    <div className="min-h-screen max-w-full flex flex-col items-center py-12 px-4 bg-gray-100">
+    <div className="flex flex-col items-center bg-gray w-full">
       {/* Card principal */}
       <div className="w-full max-w-6xl bg-white rounded-2xl shadow-lg p-8 space-y-6">
         {/* Cabeçalho */}

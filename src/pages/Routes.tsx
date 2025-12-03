@@ -14,7 +14,7 @@ export default function Routes() {
   }, []);
   return (
     <div
-      className="min-h-screen w-full flex flex-col justify-center items-center"
+      className="w-full flex flex-col justify-center items-center"
     >
       <div className="flex w-1/2 xs:w-5/6 md:w-11/12 lg:w-3/4 xl:w-4/6 flex-col items-center h-full py-16 ">
         <h1

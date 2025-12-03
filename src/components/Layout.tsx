@@ -1,26 +1,19 @@
 // src/components/Layout.tsx
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
+import Footer from './Footer';
 
 function Layout() {
   return (
-    <div className="flex flex-col min-h-screen ">
+    <div className="flex flex-col min-h-screen">
       {/* Header */}
       <Header />
-
-      {/* Main Content + Sidebar se quiser */}
-      <div className="flex flex-1 max-w-full">
-
-        {/* Conteúdo principal */}
-        <main className="flex-1 max-w-full">
-          <Outlet />
-        </main>
-      </div>
-
+      {/* Conteúdo principal */}
+      <main className="flex flex-grow w-full justify-center items-center">
+        <Outlet />
+      </main>
       {/* Footer */}
-      <footer className="bg-gray-800 text-white p-4 text-center">
-        © 2025 João Victor
-      </footer>
+      <Footer />
     </div>
   );
 }
