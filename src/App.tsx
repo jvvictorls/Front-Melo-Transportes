@@ -13,6 +13,7 @@ import Contact from './pages/Contact';
 import SignInPage from './pages/SignInPage';
 import InConstructionPage from './components/InConstructionPage';
 import Suplies from './pages/Suplies';
+import ClientArea from './pages/clientArea';
 
 const adminTypes = ['admin', 'supervisor', 'coordinator', 'manager', 'superadmin'];
 const allTypes = ['admin', 'supervisor', 'coordinator', 'manager', 'superadmin', 'user', 'driver', 'superadmin'];
@@ -86,6 +87,16 @@ function App() {
               allowedTypes={ adminTypes }
             >
               <Suplies />
+            </ProtectedRoutes>
+        }
+        />
+        <Route
+          path="/client-area"
+          element={
+            <ProtectedRoutes
+              allowedTypes={ allTypes }
+            >
+              <ClientArea />
             </ProtectedRoutes>
         }
         />

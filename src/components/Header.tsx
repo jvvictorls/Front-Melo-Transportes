@@ -1,17 +1,20 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { GrMenu } from 'react-icons/gr';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import ConditionalRender from './ConditionalRender';
 import AuthContext from '../context/AuthContext';
 
 function Header() {
   const navigate = useNavigate();
-  const token = localStorage.getItem('accessToken');
-  const userType = token ? JSON.parse(atob(token.split('.')[1])).type : null;
-  console.log(userType);
+  const [userType, setUserType] = useState<string | null>();
   const [sideBar, setSideBar] = useState(false);
   const { accessToken, setAccessToken } = useContext(AuthContext);
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    const getUserType = token ? JSON.parse(atob(token.split('.')[1])).type : null;
+    setUserType(getUserType);
+  }, []);
   return (
     <header
       className="w-full flex items-center justify-center shadow-md z-[1000] bg-white "
@@ -34,36 +37,29 @@ function Header() {
               className="h-6 xs:h-5 md:h-5  my-4"
             />
           </Link>
-
           <nav className="flex flex-1 justify-evenly items-center xs:hidden sm:hidden md:hidden space-x-4">
             <NavLink
-              to="/request"
+              to="client-area"
               className=""
             >
-              Solicitar Rota Extra
+              Área do Cliente
             </NavLink>
-            <NavLink
-              to="routes"
-              className=""
-            >
-              Rotas
-            </NavLink>
-            <ConditionalRender
-              condition={ userType === 'admin' || userType === 'superadmin' }
-            >
-              <NavLink
-                to="suplies"
-                className=""
-              >
-                Abastecimentos
-              </NavLink>
-            </ConditionalRender>
             <NavLink
               to="contact"
               className=""
             >
               Contate-nos
             </NavLink>
+            <ConditionalRender
+              condition={ userType === 'admin' || userType === 'superadmin' }
+            >
+              <NavLink
+                to="supplies"
+                className=""
+              >
+                Área Interna
+              </NavLink>
+            </ConditionalRender>
           </nav>
         </div>
         <ConditionalRender
@@ -92,6 +88,7 @@ function Header() {
         <div className="flex items-center justify-between mr-4 space-x-4">
           <button
             onClick={ () => {
+              localStorage.removeItem('accessToken');
               setAccessToken(null);
               navigate('/login');
             } }
