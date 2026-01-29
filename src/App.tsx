@@ -25,7 +25,7 @@ function App() {
         <Route path="/login" element={ <Login /> } />
         <Route path="/signin" element={ <SignInPage /> } />
         <Route
-          path="/routes"
+          path="area-do-cliente/rotas"
           element={
             <ProtectedRoutes
               allowedTypes={ allTypes }
@@ -35,7 +35,7 @@ function App() {
         }
         />
         <Route
-          path="/request"
+          path="/area-do-cliente/rotas-extras"
           element={
             <ProtectedRoutes allowedTypes={ adminTypes }>
               <RequestRoute />
@@ -43,7 +43,7 @@ function App() {
         }
         />
         <Route
-          path="collaborators"
+          path="colaboradores"
           element={
             <ProtectedRoutes allowedTypes={ adminTypes }>
               <InConstructionPage />
@@ -91,7 +91,7 @@ function App() {
         }
         />
         <Route
-          path="/client-area"
+          path="/area-do-cliente"
           element={
             <ProtectedRoutes
               allowedTypes={ allTypes }

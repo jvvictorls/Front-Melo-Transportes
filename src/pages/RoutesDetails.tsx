@@ -10,6 +10,7 @@ import ConditionalRender from '../components/ConditionalRender';
 import AddACollaboratorToRouteModal from '../components/AddACollaboratorToRouteModal';
 import ModalEditCollaborator from '../components/ModalEditCollaborator';
 import AuthContext from '../context/AuthContext';
+import GoBackButton from '../components/goBackButton';
 
 export default function RoutesDetails() {
   const { user } = useContext(AuthContext);
@@ -67,6 +68,7 @@ export default function RoutesDetails() {
       {/* Card principal */}
       <div className="w-full max-w-6xl bg-white rounded-2xl shadow-lg p-8 space-y-6">
         {/* Cabeçalho */}
+        <GoBackButton />
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center border-b pb-4">
           <h1 className="text-2xl font-bold text-gray-800">Detalhes da Rota</h1>
           <p className="text-sm text-gray-500">

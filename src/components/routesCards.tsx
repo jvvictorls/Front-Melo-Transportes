@@ -2,13 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import { RouteFromDb } from '../types/RoutesTypes';
 
 type RoutesCardsProps = {
-  routes: RouteFromDb[]
+  routes: RouteFromDb[];
 };
 export default function RoutesCards({ routes }: RoutesCardsProps) {
+  console.log(routes);
   const navigate = useNavigate();
   return (
     <div className="flex flex-col items-center justify-center w-full gap-4 md:grid md:grid-cols-3 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-3 2xl:grid 2xl:grid-cols-3">
-      {routes.map((route: any) => (
+      {routes.map((route) => (
         <div
           key={ route.id }
           className="w-full flex justify-center h-full"

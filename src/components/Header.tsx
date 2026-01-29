@@ -39,7 +39,7 @@ function Header() {
           </Link>
           <nav className="flex flex-1 justify-evenly items-center xs:hidden sm:hidden md:hidden space-x-4">
             <NavLink
-              to="client-area"
+              to="area-do-cliente"
               className=""
             >
               Área do Cliente
@@ -54,7 +54,7 @@ function Header() {
               condition={ userType === 'admin' || userType === 'superadmin' }
             >
               <NavLink
-                to="supplies"
+                to="abastecimentos"
                 className=""
               >
                 Área Interna
