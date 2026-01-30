@@ -5,6 +5,5 @@ export type FormData = {
   collaborators: string[];
   date: Date;
   time: string;
-  userId: string;
-
+  userId: number;
 };
