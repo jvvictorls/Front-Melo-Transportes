@@ -1,14 +1,15 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState, useContext } from 'react';
-import { FormData } from '../types/FormData';
-import { get, post } from '../services/request';
+import { useContext } from 'react';
 import Modal from '../components/modal';
 import AuthContext from '../context/AuthContext';
 import FormField from '../components/FormField';
-import validateFields from '../utils/validateFields';
 import CollaboratorsSearch from '../components/CollaboratorsSearch';
 import SelectedCollaborators from '../components/SelectedCollaborators';
-import { CollaboratorsType } from '../types/CollaboratorsType';
+import useCollaborators from '../hooks/useCollaborators';
+import useRequestRouteForm from '../hooks/useRequestRouteForm';
+import { FormData } from '../types/FormData';
+import validateFields from '../utils/validateFields';
+import { post } from '../services/request';
 
 export default function RequestRoute() {
   const navigate = useNavigate();
@@ -18,41 +19,20 @@ export default function RequestRoute() {
     'Qualidade', 'HSE', 'Logística',
   ];
   const { user } = useContext(AuthContext);
+  const { apiData, names } = useCollaborators();
   if (!user) {
     throw new Error('User not found');
   }
-  const [formData, setFormData] = useState<FormData>({
-    origin: '',
-    destination: '',
-    costCenter: '',
-    collaborators: [],
-    date: new Date(),
-    time: new Date().toLocaleTimeString().slice(0, 5),
-    userId: user.id,
-  });
-  const [apiData, setApiData] = useState<CollaboratorsType[]>([]);
-  const [collaborators, setCollaborators] = useState<string[]>([]);
-  const [invalidInput, setInvalidInput] = useState(false);
-  const [erroFields, setErroFields] = useState<string[] >([]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleAddCollaborator = (name: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      collaborators: [...prev.collaborators, name],
-    }));
-  };
-
-  const handleRemoveCollaborator = (name: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      collaborators: prev.collaborators.filter((c) => c !== name),
-    }));
-  };
+  const {
+    formData,
+    handleChange,
+    handleAddCollaborator,
+    handleRemoveCollaborator,
+    invalidInput,
+    setInvalidInput,
+    erroFields,
+    setErroFields,
+  } = useRequestRouteForm(user?.id);
 
   function formatData(form: FormData) {
     const collaborator = apiData.find((e) => form.collaborators.includes(e.name));
@@ -83,16 +63,6 @@ export default function RequestRoute() {
     console.log(response);
     navigate('/area-do-cliente');
   };
-
-  useEffect(() => {
-    async function fetchData() {
-      const response = await get('/collaborators');
-      setApiData(response);
-      const collaboratorsName = response.map((employee: CollaboratorsType) => employee.name);
-      setCollaborators(collaboratorsName);
-    }
-    fetchData();
-  }, []);
 
   return (
     <div className="flex w-full items-center flex-col justify-center">
@@ -153,7 +123,7 @@ export default function RequestRoute() {
           />
 
           <CollaboratorsSearch
-            collaborators={ collaborators }
+            collaborators={ names }
             selected={ formData.collaborators }
             onAdd={ handleAddCollaborator }
           />
