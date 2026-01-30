@@ -1,3 +1,5 @@
+import { IoCloseCircle } from 'react-icons/io5';
+
 type SelectedCollaboratorsProps = {
   selected: string[];
   onRemove: (collaborator: string) => void;
@@ -6,7 +8,7 @@ type SelectedCollaboratorsProps = {
 export default function SelectedCollaborators({ selected, onRemove }: SelectedCollaboratorsProps) {
   return (
     <div
-      className="xs:flex xs:flex-col xs:space-y-4 xs:w-full xs:items-center xs:justify-center lg:grid lg:grid-cols-2 lg:gap-4 lg:w-full xl:grid xl:grid-cols-4 xl:gap-4 xl:w-full"
+      className="xs:flex xs:flex-col xs:space-y-4 xs:w-full xs:items-center xs:justify-center lg:grid lg:grid-cols-2 lg:gap-4 lg:w-full xl:grid xl:grid-cols-4 xl:gap-4 xl:w-full space-y-2"
     >
       {selected.map((employee) => (
         <span
@@ -16,11 +18,12 @@ export default function SelectedCollaborators({ selected, onRemove }: SelectedCo
           {employee}
           <button
             className="rounded-3xl ml-4 text-red-400"
+            aria-label="close"
             onClick={ () => {
               onRemove(employee);
             } }
           >
-            x
+            <IoCloseCircle />
           </button>
         </span>
 

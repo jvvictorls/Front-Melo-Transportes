@@ -35,7 +35,7 @@ export default function RequestRoute() {
   } = useRequestRouteForm(user?.id);
 
   function formatData(form: FormData) {
-    const collaborator = apiData.find((e) => form.collaborators.includes(e.name));
+    const collaborator = apiData.filter((employee) => form.collaborators.includes(employee.name));
 
     if (!collaborator) return null;
 
@@ -43,8 +43,8 @@ export default function RequestRoute() {
       origin: form.origin,
       destination: form.destination,
       costCenter: form.costCenter,
-      collaborators: [{ id: collaborator.id }],
-      date: form.date,
+      collaborators: [...collaborator],
+      date: new Date(`${form.date}T12:00:00`),
       time: form.time,
       userId: form.userId,
     };
@@ -59,6 +59,7 @@ export default function RequestRoute() {
     }
     const formattedData = formatData(formDatatoDb);
     if (!formattedData) return;
+    console.log(formattedData);
     const response = await post('/extra-routes', formattedData);
     console.log(response);
     navigate('/area-do-cliente');
@@ -110,7 +111,7 @@ export default function RequestRoute() {
             label="Data"
             name="date"
             type="date"
-            value={ formData.date.toString().slice(0, 10) }
+            value={ formData.date }
             onChange={ (e) => handleChange(e) }
           />
 

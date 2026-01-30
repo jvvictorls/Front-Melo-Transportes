@@ -3,7 +3,7 @@ export type FormData = {
   destination: string;
   costCenter: string;
   collaborators: string[];
-  date: Date;
+  date: string;
   time: string;
   userId: number;
 };

@@ -5,7 +5,6 @@ type RoutesCardsProps = {
   routes: RouteFromDb[];
 };
 export default function RoutesCards({ routes }: RoutesCardsProps) {
-  console.log(routes);
   const navigate = useNavigate();
   return (
     <div className="flex flex-col items-center justify-center w-full gap-4 md:grid md:grid-cols-3 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-3 2xl:grid 2xl:grid-cols-3">

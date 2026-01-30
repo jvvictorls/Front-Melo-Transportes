@@ -6,6 +6,7 @@ import RoutesCards from '../components/routesCards';
 import AuthContext from '../context/AuthContext';
 import { RouteFromDb } from '../types/RoutesTypes';
 import GoBackButton from '../components/goBackButton';
+import TableField from '../components/TableField';
 
 async function filtRoutesByUser(userId: number | undefined): Promise<RouteFromDb[]> {
   if (!userId || userId <= 0) {
@@ -23,13 +24,14 @@ export default function ClientArea() {
   const { user } = useContext(AuthContext);
   const [extraRoutes, setExtraRoutes] = useState([]);
   const [routes, setRoutes] = useState<RouteFromDb[]>([]);
-  const tableHeaders = ['Nº', 'Origem', 'Destino', 'Data', 'Status', 'Colaboradores', 'Solicitante', 'Preço'];
+  const tableHeaders = ['Nº', 'Origem', 'Destino', 'Data', 'Status', 'Colaboradores', 'Centro de Custo', 'Solicitante', 'Preço'];
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
       try {
         const extraRoutesFromDb = await get('/extra-routes');
+        console.log(extraRoutesFromDb);
         const routesFromDb = await get('/routes');
         if (user?.type !== 'admin' && user?.type !== 'superadmin') {
           const filtRoutes = await filtRoutesByUser(user?.id);
@@ -83,14 +85,15 @@ export default function ClientArea() {
             <tbody>
               {extraRoutes.map((route: any) => (
                 <tr key={ route.id }>
-                  <td className="border px-4 py-2">{route.id}</td>
-                  <td className="border px-4 py-2">{route.origin}</td>
-                  <td className="border px-4 py-2">{route.destination}</td>
-                  <td className="border px-4 py-2">{new Date(route.date).toLocaleDateString()}</td>
-                  <td className="border px-4 py-2">{route.status}</td>
-                  <td className="border px-4 py-2">{route.collaborators.map((collaborator: any) => collaborator.name).join(', ')}</td>
-                  <td className="border px-4 py-2">{route.user.name}</td>
-                  <td className="border px-4 py-2">{route.price}</td>
+                  <TableField text={ route.id } />
+                  <TableField text={ route.origin } />
+                  <TableField text={ route.destination } />
+                  <TableField text={ new Date(route.date).toLocaleDateString('pt-BR') } />
+                  <TableField text={ route.status } />
+                  <TableField text={ route.collaborators.map((collaborator: any) => collaborator.name).join(', ') } />
+                  <TableField text={ route.costCenter } />
+                  <TableField text={ route.user.name } />
+                  <TableField text={ route.price } />
                 </tr>
               ))}
               <tr>

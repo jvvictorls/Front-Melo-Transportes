@@ -5,9 +5,9 @@ export default function useRequestRouteForm(userId: number) {
   const [formData, setFormData] = useState<FormData>({
     origin: '',
     destination: '',
-    costCenter: '',
+    costCenter: 'Produção',
     collaborators: [],
-    date: new Date(),
+    date: new Date().toLocaleDateString('pt-BR'),
     time: new Date().toLocaleTimeString().slice(0, 5),
     userId,
   });
